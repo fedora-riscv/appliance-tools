@@ -5,13 +5,14 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 003
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.et.redhat.com/?p=act.git
 Source0: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-Requires: livecd-tools >= 018
+Requires: livecd-tools >= 018 curl rsync kpartx
+Requires: zlib
 BuildRequires: python
 BuildArch: noarch
 
@@ -36,17 +37,31 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc README
-%doc COPYING
+%doc README COPYING
+%doc config/fedora-aos.ks
+%{_mandir}/man*/*
 %{_bindir}/appliance-creator
-%dir %{_datadir}/appliance-tools
-%{_datadir}/appliance-tools/*
+%{_bindir}/image-minimizer
+%{_bindir}/ec2-converter
 %dir %{python_sitelib}/appcreate
+%dir %{python_sitelib}/ec2convert
 %{python_sitelib}/appcreate/*.py
 %{python_sitelib}/appcreate/*.pyo
 %{python_sitelib}/appcreate/*.pyc
+%{python_sitelib}/ec2convert/*.py
+%{python_sitelib}/ec2convert/*.pyo
+%{python_sitelib}/ec2convert/*.pyc
 
 %changelog
+*Wed Sep 17 2008 David Huff <dhuff@redhat.com> - 003-4
+- Removed all the kickstart files in the config dir to mirror livecd-tools
+- Added the image minimization to the refactored code (BKearney)
+- multiple interface issue (#460922)
+- added --format option to specity disk image format
+- added --package option to specify output, currently only .zip supported
+- added --vmem and --vcpu options
+- Merged ec2-converter code (jboggs)
+
 *Tue Aug 26 2008 David Huff <dhuff@redhat.com> - 003-3
 - release 3 fixes minor build errors 
 
