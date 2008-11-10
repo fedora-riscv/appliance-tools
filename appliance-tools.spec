@@ -5,17 +5,18 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 002
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.net
 Source0: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-Requires: livecd-tools >= 017.1
+Requires: livecd-tools >= 017.1 curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
 BuildRequires: python
 BuildArch: noarch
+ExclusiveArch: %{ix86} x86_64 ppc alpha sparc armv4l noarch
 
 
 %description
@@ -43,12 +44,30 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man*/*
 %{_bindir}/appliance-creator
 %{_bindir}/image-minimizer
+%{_bindir}/ec2-converter
 %dir %{python_sitelib}/appcreate
+%dir %{python_sitelib}/ec2convert
 %{python_sitelib}/appcreate/*.py
 %{python_sitelib}/appcreate/*.pyo
 %{python_sitelib}/appcreate/*.pyc
+%{python_sitelib}/ec2convert/*.py
+%{python_sitelib}/ec2convert/*.pyo
+%{python_sitelib}/ec2convert/*.pyc
 
 %changelog
+* Fri Nov 07 2008 David Huff <dhuff@redhat.com> - 002-5
+- Fixed broken dependencies for specific archs where qemu is not available
+- backported ec2 converter code (jboggs)
+- backported features form applaince-tools-003-5
+-- Fixed problem with long move operations (#466278)
+-- Fixed error converting disk formats (#464798)
+-- Added support for tar archives (#470292)
+-- Added md5/sha256 disk signature support (jboggs)
+-- Modified zip functionality can now do with or with out 64bit ext.
+-- Added support for including extra file in the package (#470337)
+-- Added option for -o outdir, no longer uses name
+-- OutPut is now in a seprate dir under appliance name
+
 * Mon Oct 13 2008 David Huff <dhuff@redhat.com> 002-4
 - fix for problem with long move operations (#466278)
 - support patterns in directory names (apevec)
