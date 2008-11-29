@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 003
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.et.redhat.com/?p=act.git
@@ -53,6 +53,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyc
 
 %changelog
+* Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 003-5
+- Rebuild for Python 2.6
+
 *Wed Sep 17 2008 David Huff <dhuff@redhat.com> - 003-4
 - Removed all the kickstart files in the config dir to mirror livecd-tools
 - Added the image minimization to the refactored code (BKearney)
