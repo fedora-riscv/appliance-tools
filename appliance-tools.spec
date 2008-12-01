@@ -4,17 +4,23 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 003
-Release: 5%{?dist}
+Version: 004
+Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.et.redhat.com/?p=act.git
+# The source for this package was pulled from upstream's vcs.  Use the
+# following commands to generate the tarball:
+#  git clone git://git.et.redhat.com/act.git; cd act 
+#  git archive --format=tar --prefix=appliance-tools-%{version} appliance-tools-%{version} | bzip2 > appliance-tools-%{version}.tar.bz2
 Source0: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: livecd-tools >= 018 curl rsync kpartx
 Requires: zlib
+Requires: qemu-img
 BuildRequires: python
 BuildArch: noarch
+ExclusiveArch: %{ix86} x86_64 ppc alpha sparc armv4l noarch
 
 
 %description
@@ -53,8 +59,35 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyc
 
 %changelog
-* Sat Nov 29 2008 Ignacio Vazquez-Abrams <ivazqueznet+rpm@gmail.com> - 003-5
-- Rebuild for Python 2.6
+*Mon Dec 01 2008 David Huff <dhuff@redhat.com> - 004
+- bumped version for rebuild for Python 2.6
+- Allow the user to pass in --version and --release command line paramneters (bkearney)
+- Patches to integrate ec2 conversion into the adk (bkeareny)
+- Allow the appliance-creator to use remote urls with the new image tools (bkearney)
+
+*Fri Nov 14 2008 David Huff <dhuff@redhat.com> - 003.9
+- Fixed bug in globbing files under a directory (pmyers)
+
+*Fri Nov 14 2008 David Huff <dhuff@redhat.com> - 003.8
+- Fixed bug that causes appliance-creator to stacktrace when -i is omitted (pmyers)
+
+*Wed Nov 12 2008 David Huff <dhuff@redhat.com> - 003.7
+- Fixed problem with -i only taking one file, now can include a dir
+- Fixed versioning of source file, ie. 003.7
+
+*Mon Nov 10 2008 David Huff <dhuff@redhat.com> - 003-6
+- Fixed broken dependencies for specific archs where qemu is not available
+
+*Fri Nov 07 2008 David Huff <dhuff@redhat.com> - 003-5
+- Added error for Incomplete partition info (#465988)
+- Fixed problem with long move operations (#466278)
+- Fixed error converting disk formats (#464798)
+- Added support for tar archives (#470292)
+- Added md5/sha256 disk signature support (jboggs)
+- Modified zip functionality can now do with or with out 64bit ext.
+- Added support for including extra file in the package (#470337)
+- Added option for -o outdir, no longer uses name
+- OutPut is now in a seprate dir under appliance name
 
 *Wed Sep 17 2008 David Huff <dhuff@redhat.com> - 003-4
 - Removed all the kickstart files in the config dir to mirror livecd-tools
