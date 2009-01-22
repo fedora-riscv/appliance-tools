@@ -4,7 +4,7 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 003.10
+Version: 003.11
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
@@ -15,7 +15,7 @@ URL: http://git.et.redhat.com/?p=act.git
 #  git archive --format=tar --prefix=appliance-tools-%{version} appliance-tools-%{version} | bzip2 > appliance-tools-%{version}.tar.bz2
 Source0: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-Requires: livecd-tools >= 018 curl rsync kpartx
+Requires: livecd-tools >= 021 curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
 BuildRequires: python
@@ -59,6 +59,10 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyc
 
 %changelog
+*Tue Jan 22 2009 David Huff <dhuff@redhat.com> - 003.11
+- back port patch adds self.modules to include additional modules in ramdisk
+- requires livecd-tools 021
+
 *Tue Dec 16 2008 David Huff <dhuff@redhat.com> - 003.10
 - Changed form ExclusiveArch to EcludeArch to fix broken deps
 - Allow the appliance-creator to use remote urls (bkearney)
