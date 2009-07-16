@@ -4,8 +4,8 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 004
-Release: 3%{?dist}
+Version: 004.4
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://git.et.redhat.com/?p=act.git
@@ -15,7 +15,7 @@ URL: http://git.et.redhat.com/?p=act.git
 #  git archive --format=tar --prefix=appliance-tools-%{version} appliance-tools-%{version} | bzip2 > appliance-tools-%{version}.tar.bz2
 Source0: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
-Requires: livecd-tools >= 018 curl rsync kpartx
+Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
 BuildRequires: python
@@ -59,10 +59,10 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyc
 
 %changelog
-* Mon Feb 23 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 004-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_11_Mass_Rebuild
+*Mon Jul 07 2009 David Huff <dhuff@redhat.com> -004.4
+- added functionality include additional modules in ramdisk 
 
-*Mon Dec 01 2008 David Huff <dhuff@redhat.com> -004-2
+*Mon Dec 01 2008 David Huff <dhuff@redhat.com> -004.2
 - changed form ExclusiveArch to EcludeArch to fix broken deps
 
 *Mon Dec 01 2008 David Huff <dhuff@redhat.com> - 004
