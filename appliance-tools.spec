@@ -4,14 +4,14 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 004.4
-Release: 4%{?dist}
+Version: 004.5
+Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
-URL: http://git.et.redhat.com/?p=act.git
+URL: http://thincrust.org/
 # The source for this package was pulled from upstream's vcs.  Use the
 # following commands to generate the tarball:
-#  git clone git://git.et.redhat.com/act.git; cd act 
+#  git clone git://git.fedorahosted.org/appliance-tools.git
 #  git archive --format=tar --prefix=appliance-tools-%{version} appliance-tools-%{version} | bzip2 > appliance-tools-%{version}.tar.bz2
 Source0: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
@@ -59,6 +59,13 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyc
 
 %changelog
+* Fri Aug 20 2010 Adam Tkac <atkac redhat com> - 004.5-1
+- rebuild to ensure NVR in F14 is bigger than in F13
+- merge following changes from F12 branch [David Huff]:
+  - Fixed error while installing grub
+  - Fixed issue with Fedora 12 using dracut to generate initrd
+  - Fixed issue with Fedora 12 parted error
+
 * Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 004.4-4
 - Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
 
