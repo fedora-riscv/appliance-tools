@@ -1,18 +1,20 @@
-%{!?python_sitelib: %define python_sitelib %(%{__python} -c "import distutils.sysconfig as d; print d.get_python_lib()")}
+%{!?python_sitelib: %global python_sitelib %(%{__python} -c "import distutils.sysconfig as d; print d.get_python_lib()")}
 
 %define debug_package %{nil}
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 004.5
+Version: 005
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
 # The source for this package was pulled from upstream's vcs.  Use the
 # following commands to generate the tarball:
-#  git clone git://git.fedorahosted.org/appliance-tools.git
-#  git archive --format=tar --prefix=appliance-tools-%{version} appliance-tools-%{version} | bzip2 > appliance-tools-%{version}.tar.bz2
+#  git clone git://git.fedorahosted.org/appliance-tools
+#  cd appliance-tools
+#  git checkout appliance-tools-005
+#  make dist
 Source0: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: livecd-tools >= 020 curl rsync kpartx
@@ -25,8 +27,16 @@ ExcludeArch: ppc64 s390 s390x
 
 %description
 Tools for generating appliance images on Fedora based systems including
-derived distributions such as RHEL, CentOS and others. See
-http://thincrust.net for more details.
+derived distributions such as RHEL, CentOS and others.
+See http://thincrust.net for more details.
+
+%package minimizer
+Summary: Tool to minimize a appliance image
+Group: System Environment/Base
+BuildArch: noarch
+
+%description minimizer
+Tool that helps remove unwanted files from the appliance image.
 
 %prep
 %setup -q
@@ -47,7 +57,6 @@ rm -rf $RPM_BUILD_ROOT
 %doc config/fedora-aos.ks
 %{_mandir}/man*/*
 %{_bindir}/appliance-creator
-%{_bindir}/image-minimizer
 %{_bindir}/ec2-converter
 %dir %{python_sitelib}/appcreate
 %dir %{python_sitelib}/ec2convert
@@ -58,7 +67,17 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyo
 %{python_sitelib}/ec2convert/*.pyc
 
+%files minimizer
+%defattr(-,root,root,-)
+%doc COPYING
+%{_bindir}/image-minimizer
+
 %changelog
+* Mon Apr 04 2011 Alan Pevec <apevec@redhat.com> 005-1
+- image-minimizer: support drop-keep-drop
+- image-minimizer: add droprpm/keeprpm
+- Added sub-package for image minimizer (dhuff)
+
 * Fri Aug 20 2010 Adam Tkac <atkac redhat com> - 004.5-1
 - rebuild to ensure NVR in F14 is bigger than in F13
 - merge following changes from F12 branch [David Huff]:
