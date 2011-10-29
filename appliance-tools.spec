@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 005
-Release: 1.nogrubhack%{?dist}
+Release: 1.nogrubhack.2%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
@@ -75,7 +75,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
-* Sat Oct 29 2011 Dennis Gilmore <dennis@ausil.us> - 005-2
+* Sat Oct 29 2011 Dennis Gilmore <dennis@ausil.us> - 005-1.nogrubhack.2
+- update hack to work around no grub being installed so we can compose ec2 images
+
+* Sat Oct 29 2011 Dennis Gilmore <dennis@ausil.us> - 005-1.nogrubhack
 - add a hack to work around no grub being installed so we can compose ec2 images
 
 * Mon Apr 04 2011 Alan Pevec <apevec@redhat.com> 005-1
