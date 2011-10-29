@@ -1,0 +1,19 @@
+diff -uNr appliance-tools-005-orig/appcreate/appliance.py appliance-tools-005/appcreate/appliance.py
+--- appliance-tools-005-orig/appcreate/appliance.py	2010-09-06 18:43:21.000000000 -0500
++++ appliance-tools-005/appcreate/appliance.py	2011-10-29 08:19:04.000000000 -0500
+@@ -253,11 +253,10 @@
+         for f in files:
+             path = imgpath + "/" + f
+             if not os.path.isfile(path):
+-                raise CreatorError("grub not installed : "
+-                                   "%s not found" % path)
+-
+-            logging.debug("Copying %s to %s/boot/grub/%s" %(path, self._instroot, f))
+-            shutil.copy(path, self._instroot + "/boot/grub/" + f)
++                logging.debug("grub file %s not found assume we are ok " % path)
++                 
++            logging.debug("Not Copying %s to %s/boot/grub/%s" %(path, self._instroot, f))
++            #shutil.copy(path, self._instroot + "/boot/grub/" + f)
+ 
+     def _install_grub(self):
+         (bootdevnum, rootdevnum, rootdev, prefix) = self._get_grub_boot_config()
