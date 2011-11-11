@@ -4,8 +4,8 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 005
-Release: 1.nogrubhack.2%{?dist}
+Version: 006
+Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
@@ -16,7 +16,6 @@ URL: http://thincrust.org/
 #  git checkout appliance-tools-005
 #  make dist
 Source0: %{name}-%{version}.tar.bz2
-Patch0: appliance-tools-005-nogrub-hack.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
@@ -41,7 +40,6 @@ Tool that helps remove unwanted files from the appliance image.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 make
@@ -75,6 +73,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Fri Nov 11 2011 Marek Goldmann <mgoldman@redhat.com> - 006-1
+- Support for GRUB2 rhbz#744390
+- Align partitions by default
+- Search for grub files also in ARCH-unknown directories
+- Allow to build appliances without GRUB installed at all
+
 * Sat Oct 29 2011 Dennis Gilmore <dennis@ausil.us> - 005-1.nogrubhack.2
 - update hack to work around no grub being installed so we can compose ec2 images
 
