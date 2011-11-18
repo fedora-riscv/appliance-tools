@@ -4,7 +4,7 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 006
+Version: 006.1
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
@@ -13,7 +13,7 @@ URL: http://thincrust.org/
 # following commands to generate the tarball:
 #  git clone git://git.fedorahosted.org/appliance-tools
 #  cd appliance-tools
-#  git checkout appliance-tools-005
+#  git checkout appliance-tools-006.1
 #  make dist
 Source0: %{name}-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
@@ -73,6 +73,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Fri Nov 11 2011 Marek Goldmann <mgoldman@redhat.com> - 006.1-1
+- Upstream release 006.1
+- Search for grub files also in ARCH-pc directories
+
 * Fri Nov 11 2011 Marek Goldmann <mgoldman@redhat.com> - 006-1
 - Support for GRUB2 rhbz#744390
 - Align partitions by default
