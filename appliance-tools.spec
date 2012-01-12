@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 006.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
@@ -73,6 +73,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Thu Jan 12 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 006.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
 * Fri Nov 11 2011 Marek Goldmann <mgoldman@redhat.com> - 006.1-1
 - Upstream release 006.1
 - Search for grub files also in ARCH-pc directories
