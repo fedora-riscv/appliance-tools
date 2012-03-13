@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 006.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
@@ -16,6 +16,7 @@ URL: http://thincrust.org/
 #  git checkout appliance-tools-006.1
 #  make dist
 Source0: %{name}-%{version}.tar.bz2
+Patch0: 0001-Lets-always-write-out-a-Legacy-grub-config-file-sinc.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
@@ -40,6 +41,7 @@ Tool that helps remove unwanted files from the appliance image.
 
 %prep
 %setup -q
+%patch0 -p1 
 
 %build
 make
@@ -73,6 +75,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Tue Feb 13 2012 Dennis Gilmore <dennis@ausil.us> - 006.1-3
+- add patch to always write out a legacy grub config file
+
 * Thu Jan 12 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 006.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
 
