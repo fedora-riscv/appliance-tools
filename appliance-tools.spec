@@ -4,8 +4,8 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 006.1
-Release: 4%{?dist}
+Version: 006.2
+Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
@@ -13,9 +13,9 @@ URL: http://thincrust.org/
 # following commands to generate the tarball:
 #  git clone git://git.fedorahosted.org/appliance-tools
 #  cd appliance-tools
-#  git checkout appliance-tools-006.1
+#  git checkout appliance-tools-006.2
 #  make dist
-Source0: %{name}-%{version}.tar.bz2
+Source0: appliance-tools-%{version}.tar.bz2
 Patch0: 0001-Lets-always-write-out-a-Legacy-grub-config-file-sinc.patch
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
 Requires: livecd-tools >= 020 curl rsync kpartx
@@ -54,7 +54,6 @@ make install DESTDIR=$RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root,-)
 %doc README COPYING
 %doc config/fedora-aos.ks
 %{_mandir}/man*/*
@@ -75,6 +74,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Thu Aug 09 2012 Marek Goldmann <mgoldman@redhat.com> - 006.2-1
+- Upstream release 006.2
+
 * Wed Jul 18 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 006.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
