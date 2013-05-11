@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 006.3
-Release: 1%{?dist}
+Release: 1%{?dist}.1
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
@@ -20,6 +20,7 @@ Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
 BuildRequires: python
+BuildRequires: /usr/bin/pod2man
 BuildArch: noarch
 ExcludeArch: ppc64 s390 s390x
 
@@ -71,6 +72,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Fri May 10 2013 Dennis Gilmore <dennis@ausil.us> - 006.3-1.1
+- BuildRequires: /usr/bin/pod2man
+
 * Fri May 10 2013 Dennis Gilmore <dennis@ausil.us> - 006.3-1
 - update to 006.3
 - use UUID's for fstab and root lines
