@@ -4,8 +4,8 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 006.3
-Release: 2%{?dist}
+Version: 006.4
+Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
@@ -16,7 +16,6 @@ URL: http://thincrust.org/
 #  git checkout appliance-tools-006.2
 #  make dist
 Source0: appliance-tools-%{version}.tar.bz2
-Patch0:  0001-couple-of-typo-fixes-in-extlinux-support-from-mattdm.patch
 Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
@@ -41,7 +40,6 @@ Tool that helps remove unwanted files from the appliance image.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 make
@@ -74,6 +72,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Sat May 18 2013 Dennis Gilmore <dennis@ausil.us> - 006.4-1
+- write out kickstart file
+- correctly write out extlinux config
+- dont require --ondisk for partitions
+
 * Sun May 12 2013 Dennis Gilmore <dennis@ausil.us> - 006.3-2
 - add patch for typo fixes in extlinux config from mattdm
 
