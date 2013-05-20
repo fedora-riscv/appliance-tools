@@ -4,7 +4,7 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 006.4
+Version: 006.5
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
@@ -71,6 +71,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Sat May 19 2013 Dennis Gilmore <dennis@ausil.us> - 006.5-1
+- fix writing out kickstart file
+
 * Sat May 18 2013 Dennis Gilmore <dennis@ausil.us> - 006.4-1
 - write out kickstart file
 - correctly write out extlinux config
