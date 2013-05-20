@@ -71,7 +71,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
-* Sat May 19 2013 Dennis Gilmore <dennis@ausil.us> - 006.5-1
+* Sun May 19 2013 Dennis Gilmore <dennis@ausil.us> - 006.5-1
 - fix writing out kickstart file
 
 * Sat May 18 2013 Dennis Gilmore <dennis@ausil.us> - 006.4-1
