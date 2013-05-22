@@ -41,7 +41,7 @@ Tool that helps remove unwanted files from the appliance image.
 
 %prep
 %setup -q
-%patch1 -p1
+%patch0 -p1
 
 %build
 make
@@ -77,6 +77,7 @@ rm -rf $RPM_BUILD_ROOT
 * Wed May 22 2013 Dennis Gilmore <dennis@ausil.us> - 006.5-2
 - add patch to read vfat uuid earlier
 - leave first mb free
+
 * Sun May 19 2013 Dennis Gilmore <dennis@ausil.us> - 006.5-1
 - fix writing out kickstart file
 
