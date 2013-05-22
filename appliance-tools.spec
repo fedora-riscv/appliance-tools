@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 006.5
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
@@ -16,6 +16,7 @@ URL: http://thincrust.org/
 #  git checkout appliance-tools-006.2
 #  make dist
 Source0: appliance-tools-%{version}.tar.bz2
+Patch0:  0001-start-at-1mb-leaving-the-first-mb-free.patch
 Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
@@ -39,6 +40,7 @@ Tool that helps remove unwanted files from the appliance image.
 
 %prep
 %setup -q
+%patch1 -p1
 
 %build
 make
@@ -71,6 +73,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Wed May 22 2013 Dennis Gilmore <dennis@ausil.us> - 006.5-2
+- add patch to read vfat uuid earlier
+- leave first mb free
 * Sun May 19 2013 Dennis Gilmore <dennis@ausil.us> - 006.5-1
 - fix writing out kickstart file
 
