@@ -4,8 +4,8 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 006.5
-Release: 2%{?dist}
+Version: 006.6
+Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
@@ -13,10 +13,9 @@ URL: http://thincrust.org/
 # following commands to generate the tarball:
 #  git clone git://git.fedorahosted.org/appliance-tools
 #  cd appliance-tools
-#  git checkout appliance-tools-006.2
+#  git checkout appliance-tools-006.6
 #  make dist
 Source0: appliance-tools-%{version}.tar.bz2
-Patch0:  0001-start-at-1mb-leaving-the-first-mb-free.patch
 Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
@@ -41,7 +40,6 @@ Tool that helps remove unwanted files from the appliance image.
 
 %prep
 %setup -q
-%patch0 -p1
 
 %build
 make
@@ -74,6 +72,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Thu May 23 2013 Dennis Gilmore <dennis@ausil.us> - 006.6-1
+- really start at 1mb
+- compress qcow2 by default
+- make sure we dont destroy our newly created vfat partition
+
 * Wed May 22 2013 Dennis Gilmore <dennis@ausil.us> - 006.5-2
 - add patch to read vfat uuid earlier
 - leave first mb free
