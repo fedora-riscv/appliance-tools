@@ -4,7 +4,7 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 006.6
+Version: 007.0
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
@@ -72,6 +72,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Fri Jun 07 2013 Dennis Gilmore <dennis@ausil.us> - 007.0-1
+- specify filesystem type when creating partitions
+- extlinux fixes from mattdm
+- dont use -F 32 when making vfat partition
+
 * Thu May 23 2013 Dennis Gilmore <dennis@ausil.us> - 006.6-1
 - really start at 1mb
 - compress qcow2 by default
