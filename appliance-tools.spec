@@ -4,7 +4,7 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 007.0
+Version: 007.1
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
@@ -19,6 +19,7 @@ Source0: appliance-tools-%{version}.tar.bz2
 Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
+Requires: xz
 BuildRequires: python
 BuildRequires: /usr/bin/pod2man
 BuildArch: noarch
@@ -72,6 +73,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Fri Jun 21 2013 Dennis Gilmore <dennis@ausil.us> - 007.1-1
+- xz compress raw images
+
 * Fri Jun 07 2013 Dennis Gilmore <dennis@ausil.us> - 007.0-1
 - specify filesystem type when creating partitions
 - extlinux fixes from mattdm
