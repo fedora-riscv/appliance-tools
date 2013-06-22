@@ -4,7 +4,7 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 007.1
+Version: 007.2
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
@@ -73,6 +73,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Fri Jun 21 2013 Dennis Gilmore <dennis@ausil.us> - 007.2-1
+- fix up call to xz
+
 * Fri Jun 21 2013 Dennis Gilmore <dennis@ausil.us> - 007.1-1
 - xz compress raw images
 
