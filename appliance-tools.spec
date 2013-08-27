@@ -4,7 +4,7 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 007.3
+Version: 007.4
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
@@ -73,6 +73,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Mon Aug 26 2013 Dennis Gilmore <dennis@ausil.us> - 007.4-1
+- refacter how re deal with each mount point old version did not handle swap
+
 * Mon Aug 26 2013 Dennis Gilmore <dennis@ausil.us> - 007.3-1
 - make sure that we only have a single instance of each mount point
 
