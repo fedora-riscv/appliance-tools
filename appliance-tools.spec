@@ -4,7 +4,7 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 007.4
+Version: 007.5
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
@@ -73,6 +73,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Mon Feb 10 2014 Dennis Gilmore <dennis@ausil.us> - 007.5-1
+- arm needs extlinux-bootloader to provide for extlinux support 
+- not syslinux-extlinux
+
 * Mon Aug 26 2013 Dennis Gilmore <dennis@ausil.us> - 007.4-1
 - refacter how re deal with each mount point old version did not handle swap
 
