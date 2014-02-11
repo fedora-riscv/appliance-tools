@@ -4,7 +4,7 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 007.6
+Version: 007.7
 Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
@@ -73,6 +73,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Tue Feb 11 2014 Dennis Gilmore <dennis@ausil.us> - 007.7-1
+- make sure the package list is available when we need it
+
 * Tue Feb 11 2014 Dennis Gilmore <dennis@ausil.us> - 007.6-1
 - use a slightly different path for extlinux-bootloader package
 
