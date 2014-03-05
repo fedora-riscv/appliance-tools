@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 007.7
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
@@ -20,6 +20,7 @@ Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
 Requires: xz
+Requires: xfsprogs
 BuildRequires: python
 BuildRequires: /usr/bin/pod2man
 BuildArch: noarch
@@ -73,6 +74,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/image-minimizer
 
 %changelog
+* Wed Mar 05 2014 Dennis Gilmore <dennis@ausil.us> - 007.7-2
+- Require xfsprogs
+
 * Tue Feb 11 2014 Dennis Gilmore <dennis@ausil.us> - 007.7-1
 - make sure the package list is available when we need it
 
