@@ -1,32 +1,44 @@
-%{!?python_sitelib: %define python_sitelib %(%{__python} -c "import distutils.sysconfig as d; print d.get_python_lib()")}
+%{!?python_sitelib: %global python_sitelib %(%{__python} -c "import distutils.sysconfig as d; print d.get_python_lib()")}
 
 %define debug_package %{nil}
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 004.5
-Release: 1%{?dist}
+Version: 007.7
+Release: 2.1%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
 # The source for this package was pulled from upstream's vcs.  Use the
 # following commands to generate the tarball:
-#  git clone git://git.fedorahosted.org/appliance-tools.git
-#  git archive --format=tar --prefix=appliance-tools-%{version} appliance-tools-%{version} | bzip2 > appliance-tools-%{version}.tar.bz2
-Source0: %{name}-%{version}.tar.bz2
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+#  git clone git://git.fedorahosted.org/appliance-tools
+#  cd appliance-tools
+#  git checkout appliance-tools-006.6
+#  make dist
+Source0: appliance-tools-%{version}.tar.bz2
 Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
+Requires: xz
+Requires: xfsprogs
 BuildRequires: python
+BuildRequires: /usr/bin/pod2man
 BuildArch: noarch
 ExcludeArch: ppc64 s390 s390x
 
 
 %description
 Tools for generating appliance images on Fedora based systems including
-derived distributions such as RHEL, CentOS and others. See
-http://thincrust.net for more details.
+derived distributions such as RHEL, CentOS and others.
+See http://thincrust.net for more details.
+
+%package minimizer
+Summary: Tool to minimize a appliance image
+Group: System Environment/Base
+BuildArch: noarch
+
+%description minimizer
+Tool that helps remove unwanted files from the appliance image.
 
 %prep
 %setup -q
@@ -38,16 +50,20 @@ make
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 
+mkdir $RPM_BUILD_ROOT/%{_docdir}/%{name}-%{version}
+mv $RPM_BUILD_ROOT/%{_docdir}/%{name}/README \
+    $RPM_BUILD_ROOT/%{_docdir}/%{name}-%{version}/README
+mv $RPM_BUILD_ROOT/%{_docdir}/%{name}/COPYING \
+    $RPM_BUILD_ROOT/%{_docdir}/%{name}-%{version}/COPYING
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
-%defattr(-,root,root,-)
 %doc README COPYING
 %doc config/fedora-aos.ks
 %{_mandir}/man*/*
 %{_bindir}/appliance-creator
-%{_bindir}/image-minimizer
 %{_bindir}/ec2-converter
 %dir %{python_sitelib}/appcreate
 %dir %{python_sitelib}/ec2convert
@@ -58,11 +74,125 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyo
 %{python_sitelib}/ec2convert/*.pyc
 
+%files minimizer
+%defattr(-,root,root,-)
+%doc COPYING
+%{_bindir}/image-minimizer
+
 %changelog
-* Tue Feb 09 2010 David Huff <dhuff@redhat.com> - 004.5-1
-- Fixed error while installing grub
-- Fixed issue with Fedora 12 using dracut to generate initrd
-- Fixed issue with Fedora 12 parted error
+* Tue Apr 08 2014 Adam Miller <maxamillion@fedoraproject.org> - 007.7-2.1
+- Handle location of README and COPYING for EL6 rpm macros
+
+* Wed Mar 05 2014 Dennis Gilmore <dennis@ausil.us> - 007.7-2
+- Require xfsprogs
+
+* Tue Feb 11 2014 Dennis Gilmore <dennis@ausil.us> - 007.7-1
+- make sure the package list is available when we need it
+
+* Tue Feb 11 2014 Dennis Gilmore <dennis@ausil.us> - 007.6-1
+- use a slightly different path for extlinux-bootloader package
+
+* Mon Feb 10 2014 Dennis Gilmore <dennis@ausil.us> - 007.5-1
+- arm needs extlinux-bootloader to provide for extlinux support 
+- not syslinux-extlinux
+
+* Mon Aug 26 2013 Dennis Gilmore <dennis@ausil.us> - 007.4-1
+- refacter how re deal with each mount point old version did not handle swap
+
+* Mon Aug 26 2013 Dennis Gilmore <dennis@ausil.us> - 007.3-1
+- make sure that we only have a single instance of each mount point
+
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 007.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
+* Fri Jun 21 2013 Dennis Gilmore <dennis@ausil.us> - 007.2-1
+- fix up call to xz
+
+* Fri Jun 21 2013 Dennis Gilmore <dennis@ausil.us> - 007.1-1
+- xz compress raw images
+
+* Fri Jun 07 2013 Dennis Gilmore <dennis@ausil.us> - 007.0-1
+- specify filesystem type when creating partitions
+- extlinux fixes from mattdm
+- dont use -F 32 when making vfat partition
+
+* Thu May 23 2013 Dennis Gilmore <dennis@ausil.us> - 006.6-1
+- really start at 1mb
+- compress qcow2 by default
+- make sure we dont destroy our newly created vfat partition
+
+* Wed May 22 2013 Dennis Gilmore <dennis@ausil.us> - 006.5-2
+- add patch to read vfat uuid earlier
+- leave first mb free
+
+* Sun May 19 2013 Dennis Gilmore <dennis@ausil.us> - 006.5-1
+- fix writing out kickstart file
+
+* Sat May 18 2013 Dennis Gilmore <dennis@ausil.us> - 006.4-1
+- write out kickstart file
+- correctly write out extlinux config
+- dont require --ondisk for partitions
+
+* Sun May 12 2013 Dennis Gilmore <dennis@ausil.us> - 006.3-2
+- add patch for typo fixes in extlinux config from mattdm
+
+* Fri May 10 2013 Dennis Gilmore <dennis@ausil.us> - 006.3-1.1
+- BuildRequires: /usr/bin/pod2man
+
+* Fri May 10 2013 Dennis Gilmore <dennis@ausil.us> - 006.3-1
+- update to 006.3
+- use UUID's for fstab and root lines
+- support making vfat partition for /boot/uboot
+- support extlinux as a bootloader
+
+* Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 006.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
+* Thu Aug 09 2012 Marek Goldmann <mgoldman@redhat.com> - 006.2-1
+- Upstream release 006.2
+
+* Wed Jul 18 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 006.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Tue Feb 13 2012 Dennis Gilmore <dennis@ausil.us> - 006.1-3
+- add patch to always write out a legacy grub config file
+
+* Thu Jan 12 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 006.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
+* Fri Nov 11 2011 Marek Goldmann <mgoldman@redhat.com> - 006.1-1
+- Upstream release 006.1
+- Search for grub files also in ARCH-pc directories
+
+* Fri Nov 11 2011 Marek Goldmann <mgoldman@redhat.com> - 006-1
+- Support for GRUB2 rhbz#744390
+- Align partitions by default
+- Search for grub files also in ARCH-unknown directories
+- Allow to build appliances without GRUB installed at all
+
+* Sat Oct 29 2011 Dennis Gilmore <dennis@ausil.us> - 005-1.nogrubhack.2
+- update hack to work around no grub being installed so we can compose ec2 images
+
+* Sat Oct 29 2011 Dennis Gilmore <dennis@ausil.us> - 005-1.nogrubhack
+- add a hack to work around no grub being installed so we can compose ec2 images
+
+* Mon Apr 04 2011 Alan Pevec <apevec@redhat.com> 005-1
+- image-minimizer: support drop-keep-drop
+- image-minimizer: add droprpm/keeprpm
+- Added sub-package for image minimizer (dhuff)
+
+* Mon Feb 07 2011 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 004.5-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_15_Mass_Rebuild
+
+* Fri Aug 20 2010 Adam Tkac <atkac redhat com> - 004.5-1
+- rebuild to ensure NVR in F14 is bigger than in F13
+- merge following changes from F12 branch [David Huff]:
+  - Fixed error while installing grub
+  - Fixed issue with Fedora 12 using dracut to generate initrd
+  - Fixed issue with Fedora 12 parted error
+
+* Wed Jul 21 2010 David Malcolm <dmalcolm@redhat.com> - 004.4-4
+- Rebuilt for https://fedoraproject.org/wiki/Features/Python_2.7/MassRebuild
 
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 004.4-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
