@@ -4,7 +4,7 @@
 
 Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 007.7
+Version: 007.8
 Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Base
@@ -13,7 +13,7 @@ URL: http://thincrust.org/
 # following commands to generate the tarball:
 #  git clone git://git.fedorahosted.org/appliance-tools
 #  cd appliance-tools
-#  git checkout appliance-tools-006.6
+#  git checkout appliance-tools-007.8
 #  make dist
 Source0: appliance-tools-%{version}.tar.bz2
 Requires: livecd-tools >= 020 curl rsync kpartx
@@ -31,14 +31,6 @@ ExcludeArch: ppc64 s390 s390x
 Tools for generating appliance images on Fedora based systems including
 derived distributions such as RHEL, CentOS and others.
 See http://thincrust.net for more details.
-
-%package minimizer
-Summary: Tool to minimize a appliance image
-Group: System Environment/Base
-BuildArch: noarch
-
-%description minimizer
-Tool that helps remove unwanted files from the appliance image.
 
 %prep
 %setup -q
@@ -68,12 +60,11 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyo
 %{python_sitelib}/ec2convert/*.pyc
 
-%files minimizer
-%defattr(-,root,root,-)
-%doc COPYING
-%{_bindir}/image-minimizer
-
 %changelog
+* Sat Apr 26 2014 Dennis Gilmore <dennis@ausil.us> - 007.8-1
+- drop image-minimiser
+- change partitioning alignment to be optimal rhbz#990469
+- change default timeout in extlinux config
 * Wed Mar 05 2014 Dennis Gilmore <dennis@ausil.us> - 007.7-2
 - Require xfsprogs
 
