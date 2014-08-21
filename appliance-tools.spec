@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 007.8
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
@@ -16,6 +16,7 @@ URL: http://thincrust.org/
 #  git checkout appliance-tools-007.8
 #  make dist
 Source0: appliance-tools-%{version}.tar.bz2
+Patch0: appliance-tools-nss.hack
 Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
@@ -34,6 +35,7 @@ See http://thincrust.net for more details.
 
 %prep
 %setup -q
+%patch0 -p1
 
 %build
 make
@@ -61,6 +63,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyc
 
 %changelog
+* Thu Aug 21 2014 Dennis Gilmore <dennis@ausil.us> - 007.8-4
+- add a hack to preload the sss nss library
+
 * Sat Jun 07 2014 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 007.8-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_21_Mass_Rebuild
 
