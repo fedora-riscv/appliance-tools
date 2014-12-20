@@ -1,0 +1,5 @@
+2014-12-20: Retired because of broken deps:
+unresolved dependencies for appliance-tools-007.7-2.1.el6.noarch:
+xfsprogs
+qemu-img
+
