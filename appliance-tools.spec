@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 007.8
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
@@ -63,6 +63,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyc
 
 %changelog
+* Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 007.8-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
+
 * Thu Aug 21 2014 Dennis Gilmore <dennis@ausil.us> - 007.8-4
 - add a hack to preload the sss nss library
 
