@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 007.8
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
@@ -22,6 +22,7 @@ Requires: zlib
 Requires: qemu-img
 Requires: xz
 Requires: xfsprogs
+Requires: sssd-client
 BuildRequires: python
 BuildRequires: /usr/bin/pod2man
 BuildArch: noarch
@@ -63,6 +64,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyc
 
 %changelog
+* Sun Oct 11 2015 Lubomir Rintel <lkundrak@v3.sk>
+- Add a dependency on sssd-client
+
 * Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 007.8-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
