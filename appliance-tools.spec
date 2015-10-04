@@ -8,7 +8,7 @@ Version: 007.8
 Release: 6%{?dist}
 License: GPLv2
 Group: System Environment/Base
-URL: http://thincrust.org/
+URL: https://git.fedorahosted.org/git/appliance-tools.git
 # The source for this package was pulled from upstream's vcs.  Use the
 # following commands to generate the tarball:
 #  git clone git://git.fedorahosted.org/appliance-tools
@@ -32,7 +32,6 @@ ExcludeArch: ppc64 s390 s390x
 %description
 Tools for generating appliance images on Fedora based systems including
 derived distributions such as RHEL, CentOS and others.
-See http://thincrust.net for more details.
 
 %prep
 %setup -q
