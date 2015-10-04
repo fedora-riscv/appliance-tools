@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 007.8
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: http://thincrust.org/
@@ -22,6 +22,7 @@ Requires: zlib
 Requires: qemu-img
 Requires: xz
 Requires: xfsprogs
+Requires: sssd-client
 BuildRequires: python
 BuildRequires: /usr/bin/pod2man
 BuildArch: noarch
