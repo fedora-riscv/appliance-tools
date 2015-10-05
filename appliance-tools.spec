@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 007.8
-Release: 6%{?dist}
+Release: 6%{?dist}.lr1
 License: GPLv2
 Group: System Environment/Base
 URL: https://git.fedorahosted.org/git/appliance-tools.git
@@ -16,6 +16,7 @@ URL: https://git.fedorahosted.org/git/appliance-tools.git
 #  git checkout appliance-tools-007.8
 #  make dist
 Source0: appliance-tools-%{version}.tar.bz2
+
 Patch0: appliance-tools-nss.hack
 Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
@@ -28,6 +29,9 @@ BuildRequires: /usr/bin/pod2man
 BuildArch: noarch
 ExcludeArch: ppc64 s390 s390x
 
+Patch666: 0001-Set-releasever.patch
+Patch667: 0002-Make-it-possible-to-disable-compression.patch
+
 
 %description
 Tools for generating appliance images on Fedora based systems including
@@ -36,6 +40,8 @@ derived distributions such as RHEL, CentOS and others.
 %prep
 %setup -q
 %patch0 -p1
+%patch666 -p1
+%patch667 -p1
 
 %build
 make
