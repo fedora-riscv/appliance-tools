@@ -5,10 +5,11 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 007.8
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: https://git.fedorahosted.org/git/appliance-tools.git
+
 # The source for this package was pulled from upstream's vcs.  Use the
 # following commands to generate the tarball:
 #  git clone git://git.fedorahosted.org/appliance-tools
@@ -17,6 +18,8 @@ URL: https://git.fedorahosted.org/git/appliance-tools.git
 #  make dist
 Source0: appliance-tools-%{version}.tar.bz2
 Patch0: appliance-tools-nss.hack
+Patch1: at-fix-primary-part.patch
+
 Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
@@ -36,6 +39,7 @@ derived distributions such as RHEL, CentOS and others.
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 make
@@ -63,6 +67,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyc
 
 %changelog
+* Sat Sep 17 2016 Peter Robinson <pbrobinson@fedoraproject.org> 007.8-9
+- Allow 4 primary partitions
+
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 007.8-8
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 
