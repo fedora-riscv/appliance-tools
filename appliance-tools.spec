@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 007.8
-Release: 9%{?dist}
+Release: 10%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: https://git.fedorahosted.org/git/appliance-tools.git
@@ -18,7 +18,7 @@ URL: https://git.fedorahosted.org/git/appliance-tools.git
 #  make dist
 Source0: appliance-tools-%{version}.tar.bz2
 Patch0: appliance-tools-nss.hack
-Patch1: at-fix-primary-part.patch
+Patch1: appliance-tools-partitioning-fixes.patch
 
 Requires: livecd-tools >= 020 curl rsync kpartx
 Requires: zlib
@@ -67,6 +67,10 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyc
 
 %changelog
+* Tue Sep 20 2016 Peter Robinson <pbrobinson@fedoraproject.org> 007.8-10
+- Fix swap partition type creation
+- Set boot partition as bootable
+
 * Sat Sep 17 2016 Peter Robinson <pbrobinson@fedoraproject.org> 007.8-9
 - Allow 4 primary partitions
 
