@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 007.8
-Release: 10%{?dist}
+Release: 11%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: https://git.fedorahosted.org/git/appliance-tools.git
@@ -19,8 +19,10 @@ URL: https://git.fedorahosted.org/git/appliance-tools.git
 Source0: appliance-tools-%{version}.tar.bz2
 Patch0: appliance-tools-nss.hack
 Patch1: appliance-tools-partitioning-fixes.patch
+Patch2: 0001-Fix-import-for-compatibility-with-livecd-tools-v24.patch
 
-Requires: livecd-tools >= 020 curl rsync kpartx
+Requires: python-imgcreate >= 24.0
+Requires: curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
 Requires: xz
@@ -40,6 +42,7 @@ derived distributions such as RHEL, CentOS and others.
 %setup -q
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 make
@@ -67,6 +70,10 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyc
 
 %changelog
+* Tue Dec 06 2016 Neal Gompa <ngompa13@gmail.com> 007.8-11
+- Change dependency from livecd-tools to python-imgcreate
+- Fix for python-imgcreate v24 compatibility
+
 * Tue Sep 20 2016 Peter Robinson <pbrobinson@fedoraproject.org> 007.8-10
 - Fix swap partition type creation
 - Set boot partition as bootable
