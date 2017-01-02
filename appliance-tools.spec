@@ -5,7 +5,7 @@
 Summary: Tools for building Appliances
 Name: appliance-tools
 Version: 007.8
-Release: 12%{?dist}
+Release: 13%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: https://git.fedorahosted.org/git/appliance-tools.git
@@ -21,7 +21,8 @@ Patch0: appliance-tools-nss.hack
 Patch1: appliance-tools-partitioning-fixes.patch
 Patch2: 0001-Fix-import-for-compatibility-with-livecd-tools-v24.patch
 
-Requires: python-imgcreate >= 24.0
+# Ensure system deps are installed (rhbz#1409536)
+Requires: python-imgcreate >= 24.0-3
 Requires: python-urlgrabber
 Requires: curl rsync kpartx
 Requires: zlib
@@ -71,6 +72,9 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/ec2convert/*.pyc
 
 %changelog
+* Mon Jan 02 2017 Neal Gompa <ngompa13@gmail.com> - 007.8-13
+- Bump python-imgcreate dependency to ensure system deps are installed (#1409536)
+
 * Mon Dec 19 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 007.8-12
 - Add missing python-urlgrabber dependency (RHBZ #1405942)
 
