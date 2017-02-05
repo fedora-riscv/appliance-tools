@@ -1,28 +1,15 @@
-%{!?python_sitelib: %global python_sitelib %(%{__python} -c "import distutils.sysconfig as d; print d.get_python_lib()")}
-
-%define debug_package %{nil}
-
-Summary: Tools for building Appliances
 Name: appliance-tools
-Version: 007.8
-Release: 14%{?dist}
+Summary: Tools for building Appliances
+Version: 008.0
+Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
-URL: https://git.fedorahosted.org/git/appliance-tools.git
+URL: https://pagure.io/appliance-tools
 
-# The source for this package was pulled from upstream's vcs.  Use the
-# following commands to generate the tarball:
-#  git clone git://git.fedorahosted.org/appliance-tools
-#  cd appliance-tools
-#  git checkout appliance-tools-007.8
-#  make dist
-Source0: appliance-tools-%{version}.tar.bz2
-Patch0: appliance-tools-nss.hack
-Patch1: appliance-tools-partitioning-fixes.patch
-Patch2: 0001-Fix-import-for-compatibility-with-livecd-tools-v24.patch
+Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
 
 # Ensure system deps are installed (rhbz#1409536)
-Requires: python-imgcreate >= 1:24.0-3
+Requires: python2-imgcreate >= 1:24.0-3
 Requires: python-urlgrabber
 Requires: curl rsync kpartx
 Requires: zlib
@@ -30,10 +17,9 @@ Requires: qemu-img
 Requires: xz
 Requires: xfsprogs
 Requires: sssd-client
-BuildRequires: python
+BuildRequires: python2-devel
 BuildRequires: /usr/bin/pod2man
 BuildArch: noarch
-ExcludeArch: ppc64 s390 s390x
 
 
 %description
@@ -41,37 +27,35 @@ Tools for generating appliance images on Fedora based systems including
 derived distributions such as RHEL, CentOS and others.
 
 %prep
-%setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%autosetup
 
 %build
 make
 
 %install
-rm -rf $RPM_BUILD_ROOT
-make install DESTDIR=$RPM_BUILD_ROOT
+%make_install
 
-%clean
-rm -rf $RPM_BUILD_ROOT
+# Removing license as we'll mark it as license file later
+rm -fv %{buildroot}%{_pkgdocdir}/COPYING
 
 %files
-%doc README COPYING
+%doc README
 %doc config/fedora-aos.ks
+%license COPYING
 %{_mandir}/man*/*
 %{_bindir}/appliance-creator
 %{_bindir}/ec2-converter
-%dir %{python_sitelib}/appcreate
-%dir %{python_sitelib}/ec2convert
-%{python_sitelib}/appcreate/*.py
-%{python_sitelib}/appcreate/*.pyo
-%{python_sitelib}/appcreate/*.pyc
-%{python_sitelib}/ec2convert/*.py
-%{python_sitelib}/ec2convert/*.pyo
-%{python_sitelib}/ec2convert/*.pyc
+%dir %{python2_sitelib}/appcreate
+%dir %{python2_sitelib}/ec2convert
+%{python2_sitelib}/appcreate/*
+%{python2_sitelib}/ec2convert/*
 
 %changelog
+* Sat Feb 04 2017 Neal Gompa <ngompa13@gmail.com> - 008.0-1
+- Dropped merged patches
+- Moved to pagure
+- Modernize spec and fix changelog entries
+
 * Mon Jan 02 2017 Neal Gompa <ngompa13@gmail.com> - 007.8-14
 - Add missing Epoch for python-imgcreate dependency (#1409650)
 
@@ -186,7 +170,7 @@ rm -rf $RPM_BUILD_ROOT
 * Wed Jul 18 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 006.1-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
-* Tue Feb 13 2012 Dennis Gilmore <dennis@ausil.us> - 006.1-3
+* Mon Feb 13 2012 Dennis Gilmore <dennis@ausil.us> - 006.1-3
 - add patch to always write out a legacy grub config file
 
 * Thu Jan 12 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 006.1-2
@@ -229,32 +213,32 @@ rm -rf $RPM_BUILD_ROOT
 * Fri Jul 24 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 004.4-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
 
-*Mon Jul 07 2009 David Huff <dhuff@redhat.com> -004.4
+* Tue Jul 07 2009 David Huff <dhuff@redhat.com> -004.4
 - added functionality include additional modules in ramdisk 
 
-*Mon Dec 01 2008 David Huff <dhuff@redhat.com> -004.2
+* Mon Dec 01 2008 David Huff <dhuff@redhat.com> -004.2
 - changed form ExclusiveArch to EcludeArch to fix broken deps
 
-*Mon Dec 01 2008 David Huff <dhuff@redhat.com> - 004
+* Mon Dec 01 2008 David Huff <dhuff@redhat.com> - 004
 - bumped version for rebuild for Python 2.6
 - Allow the user to pass in --version and --release command line paramneters (bkearney)
 - Patches to integrate ec2 conversion into the adk (bkeareny)
 - Allow the appliance-creator to use remote urls with the new image tools (bkearney)
 
-*Fri Nov 14 2008 David Huff <dhuff@redhat.com> - 003.9
+* Fri Nov 14 2008 David Huff <dhuff@redhat.com> - 003.9
 - Fixed bug in globbing files under a directory (pmyers)
 
-*Fri Nov 14 2008 David Huff <dhuff@redhat.com> - 003.8
+* Fri Nov 14 2008 David Huff <dhuff@redhat.com> - 003.8
 - Fixed bug that causes appliance-creator to stacktrace when -i is omitted (pmyers)
 
-*Wed Nov 12 2008 David Huff <dhuff@redhat.com> - 003.7
+* Wed Nov 12 2008 David Huff <dhuff@redhat.com> - 003.7
 - Fixed problem with -i only taking one file, now can include a dir
 - Fixed versioning of source file, ie. 003.7
 
-*Mon Nov 10 2008 David Huff <dhuff@redhat.com> - 003-6
+* Mon Nov 10 2008 David Huff <dhuff@redhat.com> - 003-6
 - Fixed broken dependencies for specific archs where qemu is not available
 
-*Fri Nov 07 2008 David Huff <dhuff@redhat.com> - 003-5
+* Fri Nov 07 2008 David Huff <dhuff@redhat.com> - 003-5
 - Added error for Incomplete partition info (#465988)
 - Fixed problem with long move operations (#466278)
 - Fixed error converting disk formats (#464798)
@@ -265,7 +249,7 @@ rm -rf $RPM_BUILD_ROOT
 - Added option for -o outdir, no longer uses name
 - OutPut is now in a seprate dir under appliance name
 
-*Wed Sep 17 2008 David Huff <dhuff@redhat.com> - 003-4
+* Wed Sep 17 2008 David Huff <dhuff@redhat.com> - 003-4
 - Removed all the kickstart files in the config dir to mirror livecd-tools
 - Added the image minimization to the refactored code (BKearney)
 - multiple interface issue (#460922)
@@ -274,7 +258,7 @@ rm -rf $RPM_BUILD_ROOT
 - added --vmem and --vcpu options
 - Merged ec2-converter code (jboggs)
 
-*Tue Aug 26 2008 David Huff <dhuff@redhat.com> - 003-3
+* Tue Aug 26 2008 David Huff <dhuff@redhat.com> - 003-3
 - release 3 fixes minor build errors 
 
 * Wed Jul 09 2008 David Huff <dhuff@redhat.com> - 003-1
