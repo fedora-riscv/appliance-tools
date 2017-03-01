@@ -1,12 +1,16 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 008.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: https://pagure.io/appliance-tools
 
 Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
+
+# Patches backported from upstream
+Patch0: 0001-Set-releasever.patch
+Patch1: 0002-Make-it-possible-to-disable-compression.patch
 
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python2-imgcreate >= 1:24.0-3
@@ -27,7 +31,7 @@ Tools for generating appliance images on Fedora based systems including
 derived distributions such as RHEL, CentOS and others.
 
 %prep
-%autosetup
+%autosetup -p1
 
 %build
 make
@@ -51,6 +55,9 @@ rm -fv %{buildroot}%{_pkgdocdir}/COPYING
 %{python2_sitelib}/ec2convert/*
 
 %changelog
+* Tue Feb 28 2017 Neal Gompa <ngompa13@gmail.com> - 008.0-3
+- Backport patches to make more RPi friendly (#1270606)
+
 * Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 008.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
 
