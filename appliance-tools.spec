@@ -1,7 +1,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 008.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: https://pagure.io/appliance-tools
@@ -11,6 +11,7 @@ Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
 # Patches backported from upstream
 Patch0: 0001-Set-releasever.patch
 Patch1: 0002-Make-it-possible-to-disable-compression.patch
+Patch3: 0001-Use-block-size-with-xz-to-make-seekable-xz-compresse.patch
 
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python2-imgcreate >= 1:24.0-3
@@ -55,6 +56,9 @@ rm -fv %{buildroot}%{_pkgdocdir}/COPYING
 %{python2_sitelib}/ec2convert/*
 
 %changelog
+* Sun Mar 12 2017 Neal Gompa <ngompa13@gmail.com> - 008.0-4
+- Use 16 MiB block size for xz compression (#984704)
+
 * Tue Feb 28 2017 Neal Gompa <ngompa13@gmail.com> - 008.0-3
 - Backport patches to make more RPi friendly (#1270606)
 
