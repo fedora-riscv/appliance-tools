@@ -1,7 +1,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 008.0
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: https://pagure.io/appliance-tools
@@ -15,7 +15,7 @@ Patch3: 0001-Use-block-size-with-xz-to-make-seekable-xz-compresse.patch
 
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python2-imgcreate >= 1:24.0-3
-Requires: python-urlgrabber
+Requires: python2-urlgrabber
 Requires: curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
@@ -56,6 +56,10 @@ rm -fv %{buildroot}%{_pkgdocdir}/COPYING
 %{python2_sitelib}/ec2convert/*
 
 %changelog
+* Fri Dec 15 2017 Iryna Shcherbina <ishcherb@redhat.com> - 008.0-6
+- Update Python 2 dependency declarations to new packaging standards
+  (See https://fedoraproject.org/wiki/FinalizingFedoraSwitchtoPython3)
+
 * Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 008.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
