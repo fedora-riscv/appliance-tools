@@ -1,7 +1,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 008.0
-Release: 7%{?dist}
+Release: 8%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: https://pagure.io/appliance-tools
@@ -12,9 +12,10 @@ Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
 Patch0: 0001-Set-releasever.patch
 Patch1: 0002-Make-it-possible-to-disable-compression.patch
 Patch3: 0001-Use-block-size-with-xz-to-make-seekable-xz-compresse.patch
+Patch4: 0001-Remove-usage-of-kickstart.get_modules-rhbz-1544075.patch
 
 # Ensure system deps are installed (rhbz#1409536)
-Requires: python2-imgcreate >= 1:24.0-3
+Requires: python2-imgcreate >= 1:25.0-2
 Requires: python2-urlgrabber
 Requires: curl rsync kpartx
 Requires: zlib
@@ -56,6 +57,10 @@ rm -fv %{buildroot}%{_pkgdocdir}/COPYING
 %{python2_sitelib}/ec2convert/*
 
 %changelog
+* Sat Feb 10 2018 Neal Gompa <ngompa13@gmail.com> - 008.0-8
+- Fix compatibility with pykickstart 3.9+ (#1544075)
+- Bump requires of livecd-tools to minimum version with pykickstart 3.9+ compatibility
+
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 008.0-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
