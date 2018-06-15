@@ -1,7 +1,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 008.0
-Release: 8%{?dist}
+Release: 8.0.riscv64%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: https://pagure.io/appliance-tools
@@ -13,6 +13,10 @@ Patch0: 0001-Set-releasever.patch
 Patch1: 0002-Make-it-possible-to-disable-compression.patch
 Patch3: 0001-Use-block-size-with-xz-to-make-seekable-xz-compresse.patch
 Patch4: 0001-Remove-usage-of-kickstart.get_modules-rhbz-1544075.patch
+# See: https://pagure.io/appliance-tools/pull-request/4
+# See: https://pagure.io/appliance-tools/pull-request/3
+# These are not arch specific changes, they are generic
+Patch5: appliance-tools-008.0-riscv64-mods.patch
 
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python2-imgcreate >= 1:25.0-2
@@ -57,6 +61,10 @@ rm -fv %{buildroot}%{_pkgdocdir}/COPYING
 %{python2_sitelib}/ec2convert/*
 
 %changelog
+* Fri Jun 15 2018 David Abdurachmanov <david.abdurachmanov@gmail.com> - 008.0-8.0.riscv64
+- Allow xz to use all cores on machine for compression
+- If bootloader is disabled use user provided disk label
+
 * Sat Feb 10 2018 Neal Gompa <ngompa13@gmail.com> - 008.0-8
 - Fix compatibility with pykickstart 3.9+ (#1544075)
 - Bump requires of livecd-tools to minimum version with pykickstart 3.9+ compatibility
