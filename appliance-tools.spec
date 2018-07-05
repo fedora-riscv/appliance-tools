@@ -25,6 +25,7 @@ Requires: xz
 Requires: xfsprogs
 Requires: sssd-client
 BuildRequires: python2-devel
+BuildRequires: python-unversioned-command
 BuildRequires: /usr/bin/pod2man
 BuildArch: noarch
 
