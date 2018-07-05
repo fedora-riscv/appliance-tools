@@ -1,7 +1,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 008.0
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: https://pagure.io/appliance-tools
@@ -13,6 +13,7 @@ Patch0: 0001-Set-releasever.patch
 Patch1: 0002-Make-it-possible-to-disable-compression.patch
 Patch3: 0001-Use-block-size-with-xz-to-make-seekable-xz-compresse.patch
 Patch4: 0001-Remove-usage-of-kickstart.get_modules-rhbz-1544075.patch
+Patch5: lookup-fake-user-for-nss.patch
 
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python2-imgcreate >= 1:25.0-2
@@ -57,6 +58,10 @@ rm -fv %{buildroot}%{_pkgdocdir}/COPYING
 %{python2_sitelib}/ec2convert/*
 
 %changelog
+* Thu Jul 05 2018 Kevin Fenzi <kevin@scrye.com> - 008.0-9
+- Add a patch to open nss libs in the chroot to avoid install_root keeping them open. 
+- See https://bugzilla.redhat.com/show_bug.cgi?id=1591804
+
 * Sat Feb 10 2018 Neal Gompa <ngompa13@gmail.com> - 008.0-8
 - Fix compatibility with pykickstart 3.9+ (#1544075)
 - Bump requires of livecd-tools to minimum version with pykickstart 3.9+ compatibility

@@ -1,0 +1,29 @@
+diff -Nur appliance-tools-008.0.orig/tools/appliance-creator appliance-tools-008.0/tools/appliance-creator
+--- appliance-tools-008.0.orig/tools/appliance-creator	2018-07-05 13:09:19.391655392 -0700
++++ appliance-tools-008.0/tools/appliance-creator	2018-07-05 13:12:11.185416692 -0700
+@@ -168,8 +168,25 @@
+     del forgettable
+     return hack
+ 
++#
++# https://bugzilla.redhat.com/show_bug.cgi?id=1591804
++# Try and look up a unknown user in the chroot so it 
++# Opens and uses all the nss libraries in the chroot
++# Instead of doing so in the install root which might
++# Keep the libraries open and fail the build.
++#
++def do_unknown_user_hack():
++    import pwd as forgettable
++    try:
++        forgettable.getpwnam('fwefwkejkgre')
++    except:
++        pass
++    del forgettable
++    return
++
+ if __name__ == "__main__":
+     hack = do_nss_sss_hack()
++    do_unknown_user_hack()
+     sys.exit(main())
+ 
+ 
