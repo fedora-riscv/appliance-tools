@@ -1,7 +1,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 008.0
-Release: 10%{?dist}
+Release: 11%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: https://pagure.io/appliance-tools
@@ -13,20 +13,23 @@ Patch0: 0001-Set-releasever.patch
 Patch1: 0002-Make-it-possible-to-disable-compression.patch
 Patch3: 0001-Use-block-size-with-xz-to-make-seekable-xz-compresse.patch
 Patch4: 0001-Remove-usage-of-kickstart.get_modules-rhbz-1544075.patch
-Patch5: lookup-fake-user-for-nss.patch
+Patch5: 0001-open-nss-libs-in-the-chroot-to-avoid-install_root-ke.patch
+Patch6: 0001-Enable-multi-thread-support-in-xz-compression.patch
+Patch7: 0001-appcreate-Replace-urlgrabber-with-progress.patch
+Patch8: 0002-Port-everything-to-be-Python-3-compatible.patch
 
 # Ensure system deps are installed (rhbz#1409536)
-Requires: python2-imgcreate >= 1:25.0-2
-Requires: python2-urlgrabber
+Requires: python3-imgcreate >= 1:25.0-2
+Requires: python3-progress
 Requires: curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
 Requires: xz
 Requires: xfsprogs
 Requires: sssd-client
-BuildRequires: python2-devel
-BuildRequires: python-unversioned-command
+BuildRequires: python3-devel
 BuildRequires: /usr/bin/pod2man
+BuildRequires: /usr/bin/which
 BuildArch: noarch
 
 
@@ -38,10 +41,10 @@ derived distributions such as RHEL, CentOS and others.
 %autosetup -p1
 
 %build
-make
+# Nothing to do
 
 %install
-%make_install
+%make_install PYTHON=python3
 
 # Removing license as we'll mark it as license file later
 rm -fv %{buildroot}%{_pkgdocdir}/COPYING
@@ -53,12 +56,17 @@ rm -fv %{buildroot}%{_pkgdocdir}/COPYING
 %{_mandir}/man*/*
 %{_bindir}/appliance-creator
 %{_bindir}/ec2-converter
-%dir %{python2_sitelib}/appcreate
-%dir %{python2_sitelib}/ec2convert
-%{python2_sitelib}/appcreate/*
-%{python2_sitelib}/ec2convert/*
+%dir %{python3_sitelib}/appcreate
+%dir %{python3_sitelib}/ec2convert
+%{python3_sitelib}/appcreate/*
+%{python3_sitelib}/ec2convert/*
 
 %changelog
+* Tue Nov 13 2018 Neal Gompa <ngompa13@gmail.com> - 008.0-11
+- Port to Python 3
+- Backport xz multi-threading support
+- Refresh nss libs hack patch
+
 * Thu Jul 12 2018 Fedora Release Engineering <releng@fedoraproject.org> - 008.0-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
