@@ -1,7 +1,18 @@
+%if (0%{?rhel} && 0%{?rhel} <= 7)
+# Since the Python 3 stack in EPEL is missing too many dependencies,
+# we're sticking with Python 2 there for now.
+%global __python %{__python2}
+%global python_pkgversion %{nil}
+%else
+# Default to Python 3 when not EL
+%global __python %{__python3}
+%global python_pkgversion %{python3_pkgversion}
+%endif
+
 Name: appliance-tools
 Summary: Tools for building Appliances
-Version: 008.0
-Release: 11%{?dist}
+Version: 009.0
+Release: 1%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: https://pagure.io/appliance-tools
@@ -9,25 +20,17 @@ URL: https://pagure.io/appliance-tools
 Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
 
 # Patches backported from upstream
-Patch0: 0001-Set-releasever.patch
-Patch1: 0002-Make-it-possible-to-disable-compression.patch
-Patch3: 0001-Use-block-size-with-xz-to-make-seekable-xz-compresse.patch
-Patch4: 0001-Remove-usage-of-kickstart.get_modules-rhbz-1544075.patch
-Patch5: 0001-open-nss-libs-in-the-chroot-to-avoid-install_root-ke.patch
-Patch6: 0001-Enable-multi-thread-support-in-xz-compression.patch
-Patch7: 0001-appcreate-Replace-urlgrabber-with-progress.patch
-Patch8: 0002-Port-everything-to-be-Python-3-compatible.patch
 
 # Ensure system deps are installed (rhbz#1409536)
-Requires: python3-imgcreate >= 1:25.0-2
-Requires: python3-progress
+Requires: python%{python_pkgversion}-imgcreate >= 1:25.0-2
+Requires: python%{python_pkgversion}-progress
 Requires: curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
 Requires: xz
 Requires: xfsprogs
 Requires: sssd-client
-BuildRequires: python3-devel
+BuildRequires: python%{python_pkgversion}-devel
 BuildRequires: /usr/bin/pod2man
 BuildRequires: /usr/bin/which
 BuildArch: noarch
@@ -44,7 +47,7 @@ derived distributions such as RHEL, CentOS and others.
 # Nothing to do
 
 %install
-%make_install PYTHON=python3
+%make_install PYTHON=%{__python}
 
 # Removing license as we'll mark it as license file later
 rm -fv %{buildroot}%{_pkgdocdir}/COPYING
@@ -56,12 +59,15 @@ rm -fv %{buildroot}%{_pkgdocdir}/COPYING
 %{_mandir}/man*/*
 %{_bindir}/appliance-creator
 %{_bindir}/ec2-converter
-%dir %{python3_sitelib}/appcreate
-%dir %{python3_sitelib}/ec2convert
-%{python3_sitelib}/appcreate/*
-%{python3_sitelib}/ec2convert/*
+%{python_sitelib}/appcreate/
+%{python_sitelib}/ec2convert/
 
 %changelog
+* Thu Nov 15 2018 Neal Gompa <ngompa13@gmail.com> - 009.0-1
+- Update to 009.0 relase
+- Dropped merged patches
+- Added compatibility for EL7 builds
+
 * Tue Nov 13 2018 Neal Gompa <ngompa13@gmail.com> - 008.0-11
 - Port to Python 3
 - Backport xz multi-threading support
