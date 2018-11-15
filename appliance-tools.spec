@@ -12,7 +12,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 009.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: https://pagure.io/appliance-tools
@@ -37,8 +37,8 @@ BuildArch: noarch
 
 
 %description
-Tools for generating appliance images on Fedora based systems including
-derived distributions such as RHEL, CentOS and others.
+Tools for generating appliance images on Fedora based systems, including
+derived distributions such as RHEL, CentOS, and others.
 
 %prep
 %autosetup -p1
@@ -49,8 +49,8 @@ derived distributions such as RHEL, CentOS and others.
 %install
 %make_install PYTHON=%{__python}
 
-# Removing license as we'll mark it as license file later
-rm -fv %{buildroot}%{_pkgdocdir}/COPYING
+# Delete docs, we'll grab them later
+rm -rf %{buildroot}%{_datadir}/doc/%{name}
 
 %files
 %doc README
@@ -63,6 +63,10 @@ rm -fv %{buildroot}%{_pkgdocdir}/COPYING
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Thu Nov 15 2018 Neal Gompa <ngompa13@gmail.com> - 009.0-2
+- Fix package description grammar
+- Fix grabbing docs on EL7
+
 * Thu Nov 15 2018 Neal Gompa <ngompa13@gmail.com> - 009.0-1
 - Update to 009.0 relase
 - Dropped merged patches
