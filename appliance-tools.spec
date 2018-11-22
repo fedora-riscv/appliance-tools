@@ -12,7 +12,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 009.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2
 Group: System Environment/Base
 URL: https://pagure.io/appliance-tools
@@ -24,6 +24,7 @@ Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python%{python_pkgversion}-imgcreate >= 1:25.0-2
 Requires: python%{python_pkgversion}-progress
+Requires: python%{python_pkgversion}-future
 Requires: curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
@@ -63,6 +64,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Thu Nov 22 2018 Neal Gompa <ngompa13@gmail.com> - 009.0-3
+- Add missing dep for python-future
+
 * Thu Nov 15 2018 Neal Gompa <ngompa13@gmail.com> - 009.0-2
 - Fix package description grammar
 - Fix grabbing docs on EL7
