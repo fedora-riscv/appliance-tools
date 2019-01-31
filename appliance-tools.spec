@@ -12,7 +12,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 009.0
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
@@ -64,6 +64,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 009.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
 * Thu Nov 22 2018 Neal Gompa <ngompa13@gmail.com> - 009.0-4
 - Backport fix to detect swap partition type correctly
 
