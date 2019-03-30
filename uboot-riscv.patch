@@ -1,0 +1,68 @@
+diff --git a/appcreate/appliance.py b/appcreate/appliance.py
+index c6706cb..b90d6da 100644
+--- a/appcreate/appliance.py
++++ b/appcreate/appliance.py
+@@ -169,7 +169,7 @@ class ApplianceImageCreator(ImageCreator):
+         packages = kickstart.get_packages(self.ks)
+         # make this the default
+         partition_layout = 'msdos'
+-        # set bootloader only if it is enabled and use user specified partition_layout
++        # set bootloader only if it is enabled
+         if ((not hasattr(self.ks.handler.bootloader, "disabled")) or
+            (hasattr(self.ks.handler.bootloader, "disabled") and self.ks.handler.bootloader.disabled is False)):
+             # check for extlinux in kickstart then grub2 and falling back to grub
+@@ -188,11 +188,11 @@ class ApplianceImageCreator(ImageCreator):
+                     self.bootloader = 'grub'
+                 else:
+                     logging.warning("WARNING! grub package not found.")
+-        else:
+-            # user explicitly disabled bootloader (i.e. not part of disk image)
+-            if hasattr(self.ks.handler.clearpart, "disklabel"):
+-                logging.debug("Using user set default disk label: {}".format(self.ks.handler.clearpart.disklabel))
+-                partition_layout = self.ks.handler.clearpart.disklabel
++
++        # user explicitly selected partition layout thus overrride the current selected
++        if hasattr(self.ks.handler.clearpart, "disklabel"):
++            logging.debug("Using user set default disk label: {}".format(self.ks.handler.clearpart.disklabel))
++            partition_layout = self.ks.handler.clearpart.disklabel
+ 
+         self.__instloop = PartitionedMount(self.__disks,
+                                            self._instroot,
+@@ -352,17 +352,35 @@ class ApplianceImageCreator(ImageCreator):
+             for version in kernels[kernel]:
+                 versions.append(version)
+ 
++        # Find kernel filename
++        if int(subprocess.Popen("ls " + self._instroot + "/boot/uImage* | wc -l", shell=True, stdout=subprocess.PIPE).communicate()[0].decode("utf-8").strip()) > 0:
++            # U-Boot wrapped kernel
++            kernelfn = "uImage"
++        else:
++            kernelfn = "vmlinuz"
++
++        logging.debug("Found kernel filename: %s" % kernelfn)
++
++        # Find ramdisk filename
+         if int(subprocess.Popen("ls " + self._instroot + "/boot/initramfs* | wc -l", shell=True, stdout=subprocess.PIPE).communicate()[0].decode("utf-8").strip()) > 0:
+             initrd = "initramfs"
++        elif int(subprocess.Popen("ls " + self._instroot + "/boot/uInitrd* | wc -l", shell=True, stdout=subprocess.PIPE).communicate()[0].decode("utf-8").strip()) > 0:
++            # U-Boot wrapped ramdisk
++            initrd = "uInitrd"
+         else:
+             initrd = "initrd"
+ 
++        logging.debug("Found ramdisk filename: %s" % initrd)
++
+         for v in versions:
+             extlinux += "label %s (%s)\n" % (self.name, v)
+-            extlinux += "\tkernel %s/vmlinuz-%s\n" % (prefix, v)
++            extlinux += "\tkernel %s/%s-%s\n" % (prefix, kernelfn, v)
+             extlinux += "\tappend ro root=%s %s\n" % (rootdev, options)
+             if 'extlinux-bootloader' in packages:
+-                extlinux += "\tfdtdir %s/dtb-%s/\n" % (prefix, v)
++                logging.debug("Checking for %s/dtb-%s/" % (self.self._instroot + prefix, v))
++                if os.path.exists("%s/dtb-%s/" % (self.self._instroot + prefix, v)):
++                    logging.debug("Found, adding fdtdir entry to extlinux.conf")
++                    extlinux += "\tfdtdir %s/dtb-%s/\n" % (prefix, v)
+             extlinux += "\tinitrd %s/%s-%s.img\n\n" % (prefix, initrd, v)
+ 
+ 

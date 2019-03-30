@@ -12,7 +12,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 009.0
-Release: 5%{?dist}
+Release: 5.0.riscv64%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
@@ -20,6 +20,9 @@ Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
 
 # Patches backported from upstream
 Patch0001: 0001-fstype-is-optional-for-swap-check-mountpoint-also.patch
+
+# Patches for U-Boot RISC-V (riscv64) extlinux support
+Patch0020: uboot-riscv.patch
 
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python%{python_pkgversion}-imgcreate >= 1:25.0-2
@@ -64,6 +67,11 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Sat Mar 30 2019 David Abdurachmanov <david.abdurachmanov@gmail.com> - 009.0-5.0.riscv64
+- Allow user to override partition layout (clearpart kickstart command)
+- Detect if DTB is available in boot prefix (usually /boot) for extlinux.conf
+- Detect uImage / uInitrd for extlinux.conf
+
 * Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 009.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
