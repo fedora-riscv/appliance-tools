@@ -1,52 +1,57 @@
+%if (0%{?rhel} && 0%{?rhel} <= 7)
+# Since the Python 3 stack in EPEL is missing too many dependencies,
+# we're sticking with Python 2 there for now.
+%global __python %{__python2}
+%global python_pkgversion %{nil}
+%else
+# Default to Python 3 when not EL
+%global __python %{__python3}
+%global python_pkgversion %{python3_pkgversion}
+%endif
+
 Name: appliance-tools
 Summary: Tools for building Appliances
-Version: 008.0
-Release: 8.0.riscv64%{?dist}
+Version: 009.0
+Release: 5%{?dist}
 License: GPLv2
-Group: System Environment/Base
 URL: https://pagure.io/appliance-tools
 
 Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
 
 # Patches backported from upstream
-Patch0: 0001-Set-releasever.patch
-Patch1: 0002-Make-it-possible-to-disable-compression.patch
-Patch3: 0001-Use-block-size-with-xz-to-make-seekable-xz-compresse.patch
-Patch4: 0001-Remove-usage-of-kickstart.get_modules-rhbz-1544075.patch
-# See: https://pagure.io/appliance-tools/pull-request/4
-# See: https://pagure.io/appliance-tools/pull-request/3
-# These are not arch specific changes, they are generic
-Patch5: appliance-tools-008.0-riscv64-mods.patch
+Patch0001: 0001-fstype-is-optional-for-swap-check-mountpoint-also.patch
 
 # Ensure system deps are installed (rhbz#1409536)
-Requires: python2-imgcreate >= 1:25.0-2
-Requires: python2-urlgrabber
+Requires: python%{python_pkgversion}-imgcreate >= 1:25.0-2
+Requires: python%{python_pkgversion}-progress
+Requires: python%{python_pkgversion}-future
 Requires: curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
 Requires: xz
 Requires: xfsprogs
 Requires: sssd-client
-BuildRequires: python2-devel
+BuildRequires: python%{python_pkgversion}-devel
 BuildRequires: /usr/bin/pod2man
+BuildRequires: /usr/bin/which
 BuildArch: noarch
 
 
 %description
-Tools for generating appliance images on Fedora based systems including
-derived distributions such as RHEL, CentOS and others.
+Tools for generating appliance images on Fedora based systems, including
+derived distributions such as RHEL, CentOS, and others.
 
 %prep
 %autosetup -p1
 
 %build
-make
+# Nothing to do
 
 %install
-%make_install
+%make_install PYTHON=%{__python}
 
-# Removing license as we'll mark it as license file later
-rm -fv %{buildroot}%{_pkgdocdir}/COPYING
+# Delete docs, we'll grab them later
+rm -rf %{buildroot}%{_datadir}/doc/%{name}
 
 %files
 %doc README
@@ -55,15 +60,39 @@ rm -fv %{buildroot}%{_pkgdocdir}/COPYING
 %{_mandir}/man*/*
 %{_bindir}/appliance-creator
 %{_bindir}/ec2-converter
-%dir %{python2_sitelib}/appcreate
-%dir %{python2_sitelib}/ec2convert
-%{python2_sitelib}/appcreate/*
-%{python2_sitelib}/ec2convert/*
+%{python_sitelib}/appcreate/
+%{python_sitelib}/ec2convert/
 
 %changelog
-* Fri Jun 15 2018 David Abdurachmanov <david.abdurachmanov@gmail.com> - 008.0-8.0.riscv64
-- Allow xz to use all cores on machine for compression
-- If bootloader is disabled use user provided disk label
+* Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 009.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
+* Thu Nov 22 2018 Neal Gompa <ngompa13@gmail.com> - 009.0-4
+- Backport fix to detect swap partition type correctly
+
+* Thu Nov 22 2018 Neal Gompa <ngompa13@gmail.com> - 009.0-3
+- Add missing dep for python-future
+
+* Thu Nov 15 2018 Neal Gompa <ngompa13@gmail.com> - 009.0-2
+- Fix package description grammar
+- Fix grabbing docs on EL7
+
+* Thu Nov 15 2018 Neal Gompa <ngompa13@gmail.com> - 009.0-1
+- Update to 009.0 relase
+- Dropped merged patches
+- Added compatibility for EL7 builds
+
+* Tue Nov 13 2018 Neal Gompa <ngompa13@gmail.com> - 008.0-11
+- Port to Python 3
+- Backport xz multi-threading support
+- Refresh nss libs hack patch
+
+* Thu Jul 12 2018 Fedora Release Engineering <releng@fedoraproject.org> - 008.0-10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
+* Thu Jul 05 2018 Kevin Fenzi <kevin@scrye.com> - 008.0-9
+- Add a patch to open nss libs in the chroot to avoid install_root keeping them open. 
+- See https://bugzilla.redhat.com/show_bug.cgi?id=1591804
 
 * Sat Feb 10 2018 Neal Gompa <ngompa13@gmail.com> - 008.0-8
 - Fix compatibility with pykickstart 3.9+ (#1544075)
