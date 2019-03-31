@@ -1,5 +1,5 @@
 diff --git a/appcreate/appliance.py b/appcreate/appliance.py
-index c6706cb..b90d6da 100644
+index c6706cb..38a8239 100644
 --- a/appcreate/appliance.py
 +++ b/appcreate/appliance.py
 @@ -169,7 +169,7 @@ class ApplianceImageCreator(ImageCreator):
@@ -32,6 +32,7 @@ index c6706cb..b90d6da 100644
              for version in kernels[kernel]:
                  versions.append(version)
  
+-        if int(subprocess.Popen("ls " + self._instroot + "/boot/initramfs* | wc -l", shell=True, stdout=subprocess.PIPE).communicate()[0].decode("utf-8").strip()) > 0:
 +        # Find kernel filename
 +        if int(subprocess.Popen("ls " + self._instroot + "/boot/uImage* | wc -l", shell=True, stdout=subprocess.PIPE).communicate()[0].decode("utf-8").strip()) > 0:
 +            # U-Boot wrapped kernel
@@ -42,11 +43,11 @@ index c6706cb..b90d6da 100644
 +        logging.debug("Found kernel filename: %s" % kernelfn)
 +
 +        # Find ramdisk filename
-         if int(subprocess.Popen("ls " + self._instroot + "/boot/initramfs* | wc -l", shell=True, stdout=subprocess.PIPE).communicate()[0].decode("utf-8").strip()) > 0:
-             initrd = "initramfs"
-+        elif int(subprocess.Popen("ls " + self._instroot + "/boot/uInitrd* | wc -l", shell=True, stdout=subprocess.PIPE).communicate()[0].decode("utf-8").strip()) > 0:
++        if int(subprocess.Popen("ls " + self._instroot + "/boot/uInitrd* | wc -l", shell=True, stdout=subprocess.PIPE).communicate()[0].decode("utf-8").strip()) > 0:
 +            # U-Boot wrapped ramdisk
 +            initrd = "uInitrd"
++        elif int(subprocess.Popen("ls " + self._instroot + "/boot/initramfs* | wc -l", shell=True, stdout=subprocess.PIPE).communicate()[0].decode("utf-8").strip()) > 0:
+             initrd = "initramfs"
          else:
              initrd = "initrd"
  
