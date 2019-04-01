@@ -1,5 +1,5 @@
 diff --git a/appcreate/appliance.py b/appcreate/appliance.py
-index c6706cb..38a8239 100644
+index c6706cb..36274c9 100644
 --- a/appcreate/appliance.py
 +++ b/appcreate/appliance.py
 @@ -169,7 +169,7 @@ class ApplianceImageCreator(ImageCreator):
@@ -61,7 +61,7 @@ index c6706cb..38a8239 100644
              if 'extlinux-bootloader' in packages:
 -                extlinux += "\tfdtdir %s/dtb-%s/\n" % (prefix, v)
 +                logging.debug("Checking for %s/dtb-%s/" % (self.self._instroot + prefix, v))
-+                if os.path.exists("%s/dtb-%s/" % (self.self._instroot + prefix, v)):
++                if os.path.exists("%s/dtb-%s/" % (self._instroot + prefix, v)):
 +                    logging.debug("Found, adding fdtdir entry to extlinux.conf")
 +                    extlinux += "\tfdtdir %s/dtb-%s/\n" % (prefix, v)
              extlinux += "\tinitrd %s/%s-%s.img\n\n" % (prefix, initrd, v)
