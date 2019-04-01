@@ -12,7 +12,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 009.0
-Release: 5.3.riscv64%{?dist}
+Release: 5.4.riscv64%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 

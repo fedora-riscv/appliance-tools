@@ -1,5 +1,5 @@
 diff --git a/appcreate/appliance.py b/appcreate/appliance.py
-index c6706cb..dffde73 100644
+index c6706cb..86b4437 100644
 --- a/appcreate/appliance.py
 +++ b/appcreate/appliance.py
 @@ -169,7 +169,7 @@ class ApplianceImageCreator(ImageCreator):
@@ -28,7 +28,7 @@ index c6706cb..dffde73 100644
  
          self.__instloop = PartitionedMount(self.__disks,
                                             self._instroot,
-@@ -352,17 +352,35 @@ class ApplianceImageCreator(ImageCreator):
+@@ -352,18 +352,39 @@ class ApplianceImageCreator(ImageCreator):
              for version in kernels[kernel]:
                  versions.append(version)
  
@@ -46,13 +46,16 @@ index c6706cb..dffde73 100644
 +        if int(subprocess.Popen("ls " + self._instroot + "/boot/uInitrd* | wc -l", shell=True, stdout=subprocess.PIPE).communicate()[0].decode("utf-8").strip()) > 0:
 +            # U-Boot wrapped ramdisk
 +            initrd = "uInitrd"
++            initrd_ext = ""
 +        elif int(subprocess.Popen("ls " + self._instroot + "/boot/initramfs* | wc -l", shell=True, stdout=subprocess.PIPE).communicate()[0].decode("utf-8").strip()) > 0:
              initrd = "initramfs"
++            initrd_ext = ".img"
          else:
              initrd = "initrd"
- 
-+        logging.debug("Found ramdisk filename: %s" % initrd)
++            initrd_ext = ".img"
 +
++        logging.debug("Found ramdisk filename: %s" % initrd)
+ 
          for v in versions:
              extlinux += "label %s (%s)\n" % (self.name, v)
 -            extlinux += "\tkernel %s/vmlinuz-%s\n" % (prefix, v)
@@ -60,10 +63,12 @@ index c6706cb..dffde73 100644
              extlinux += "\tappend ro root=%s %s\n" % (rootdev, options)
              if 'extlinux-bootloader' in packages:
 -                extlinux += "\tfdtdir %s/dtb-%s/\n" % (prefix, v)
+-            extlinux += "\tinitrd %s/%s-%s.img\n\n" % (prefix, initrd, v)
 +                logging.debug("Checking for %s/dtb-%s/" % (self._instroot + prefix, v))
 +                if os.path.exists("%s/dtb-%s/" % (self._instroot + prefix, v)):
 +                    logging.debug("Found, adding fdtdir entry to extlinux.conf")
 +                    extlinux += "\tfdtdir %s/dtb-%s/\n" % (prefix, v)
-             extlinux += "\tinitrd %s/%s-%s.img\n\n" % (prefix, initrd, v)
++            extlinux += "\tinitrd %s/%s-%s%s\n\n" % (prefix, initrd, initrd_ext, v)
  
  
+         logging.debug("Writing extlinux config %s/boot/extlinux/extlinux.conf" % self._instroot)
