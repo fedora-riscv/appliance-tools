@@ -20,6 +20,7 @@ Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
 
 # Patches backported from upstream
 Patch0001: 0001-fstype-is-optional-for-swap-check-mountpoint-also.patch
+Patch0002: 0001-Leave-more-space-4MB-for-uboot-before-the-first-part.patch
 
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python%{python_pkgversion}-imgcreate >= 1:25.0-2
@@ -64,6 +65,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Sat Jul 13 2019 Neal Gompa <ngompa13@gmail.com> - 009.0-6
+- Backport fix to adjust offset from 1M to 4M for bigger uboot images
+
 * Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 009.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
