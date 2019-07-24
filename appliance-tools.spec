@@ -12,7 +12,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 009.0
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
@@ -65,6 +65,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Wed Jul 24 2019 Fedora Release Engineering <releng@fedoraproject.org> - 009.0-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
 * Sat Jul 13 2019 Neal Gompa <ngompa13@gmail.com> - 009.0-6
 - Backport fix to adjust offset from 1M to 4M for bigger uboot images
 
