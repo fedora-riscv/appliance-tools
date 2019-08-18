@@ -12,7 +12,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 009.0
-Release: 5.4.riscv64%{?dist}
+Release: 7.0.riscv64%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
@@ -20,6 +20,7 @@ Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
 
 # Patches backported from upstream
 Patch0001: 0001-fstype-is-optional-for-swap-check-mountpoint-also.patch
+Patch0002: 0001-Leave-more-space-4MB-for-uboot-before-the-first-part.patch
 
 # Patches for U-Boot RISC-V (riscv64) extlinux support
 Patch0020: uboot-riscv.patch
@@ -67,10 +68,16 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
-* Sat Mar 30 2019 David Abdurachmanov <david.abdurachmanov@gmail.com> - 009.0-5.0.riscv64
+* Sun Aug 18 2019 David Abdurachmanov <david.abdurachmanov@sifive.com> - 009.0-7.0.riscv64
 - Allow user to override partition layout (clearpart kickstart command)
 - Detect if DTB is available in boot prefix (usually /boot) for extlinux.conf
 - Detect uImage / uInitrd for extlinux.conf
+
+* Wed Jul 24 2019 Fedora Release Engineering <releng@fedoraproject.org> - 009.0-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
+* Sat Jul 13 2019 Neal Gompa <ngompa13@gmail.com> - 009.0-6
+- Backport fix to adjust offset from 1M to 4M for bigger uboot images
 
 * Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 009.0-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
