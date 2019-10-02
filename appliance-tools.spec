@@ -12,7 +12,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 009.0
-Release: 7%{?dist}
+Release: 7.0.riscv64%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
@@ -22,6 +22,10 @@ Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
 Patch0001: 0001-fstype-is-optional-for-swap-check-mountpoint-also.patch
 Patch0002: 0001-Leave-more-space-4MB-for-uboot-before-the-first-part.patch
 
+# NOT upstream
+# Add support for zstd compression instead of xz (optional)
+Patch0010: appliance-tools-add-zstd.patch
+
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python%{python_pkgversion}-imgcreate >= 1:25.0-2
 Requires: python%{python_pkgversion}-progress
@@ -30,6 +34,7 @@ Requires: curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
 Requires: xz
+Requires: zstd
 Requires: xfsprogs
 Requires: sssd-client
 BuildRequires: python%{python_pkgversion}-devel
@@ -65,6 +70,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Wed Oct 02 2019 David Abdurachmanov <david.abdurachmanov@sifive.com> - 009.0-7.0.riscv64
+- Add support for zstd compression for images (optional)
+
 * Wed Jul 24 2019 Fedora Release Engineering <releng@fedoraproject.org> - 009.0-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
 

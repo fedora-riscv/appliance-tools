@@ -1,0 +1,84 @@
+diff --git a/appcreate/appliance.py b/appcreate/appliance.py
+index c6706cb..6276600 100644
+--- a/appcreate/appliance.py
++++ b/appcreate/appliance.py
+@@ -47,7 +47,7 @@ class ApplianceImageCreator(ImageCreator):
+ 
+     """
+ 
+-    def __init__(self, ks, name, disk_format, vmem, vcpu, releasever=None, no_compress=False):
++    def __init__(self, ks, name, disk_format, vmem, vcpu, releasever=None, no_compress=False, zstd=False, zstd_level=None):
+         """Initialize a ApplianceImageCreator instance.
+ 
+         This method takes the same arguments as ImageCreator.__init__()
+@@ -60,6 +60,8 @@ class ApplianceImageCreator(ImageCreator):
+         self.__disks = {}
+         self.__disk_format = disk_format
+         self.__compress = not no_compress
++        self.__zstd = zstd
++        self.__zstd_level = zstd_level
+ 
+         #appliance parameters
+         self.vmem = vmem
+@@ -657,14 +659,29 @@ class ApplianceImageCreator(ImageCreator):
+                 dst = "%s/%s-%s.%s" % (self._outdir, self.name, name, self.__disk_format)
+ 
+                 if self.__compress:
+-                    # Compress with xz using 16 MiB block size for seekability
+-                    rc = subprocess.call(["xz", "-z", "--block-size=16777216", "-T 0", src])
+-                    if rc == 0:
+-                        logging.debug("compression successful")
+-                    if rc != 0:
+-                        raise CreatorError("Unable to compress disk to %s" % self.__disk_format)
+-                    src = "%s.xz" % (src)
+-                    dst = "%s.xz" % (dst)
++                    if self.__zstd:
++                        # Compress with zstd using 16MiB blocks size (for future seekability)
++                        zstd_cmd = ["zstd", "-z", "--block-size=16777216", "-T0", src]
++                        # Use custom compression level if specified
++                        if self.__zstd_level:
++                            zstd_cmd.append("-%s" % self.__zstd_level)
++                        zstd_cmd.append(src)
++                        rc = subprocess.call(zstd_cmd)
++                        if rc == 0:
++                            logging.debug("compression successful")
++                        if rc != 0:
++                            raise CreatorError("Unable to compress disk to %s, command: %s" % (self.__disk_format, zstd_cmd))
++                        src = "%s.zst" % (src)
++                        dst = "%s.zst" % (dst)
++                    else:
++                        # Compress with xz using 16 MiB block size for seekability
++                        rc = subprocess.call(["xz", "-z", "--block-size=16777216", "-T 0", src])
++                        if rc == 0:
++                            logging.debug("compression successful")
++                        if rc != 0:
++                            raise CreatorError("Unable to compress disk to %s" % self.__disk_format)
++                        src = "%s.xz" % (src)
++                        dst = "%s.xz" % (dst)
+ 
+                 logging.debug("moving %s to %s" % (src, dst))
+                 shutil.move(src, dst)
+diff --git a/tools/appliance-creator b/tools/appliance-creator
+index eef1ede..6a0cf1c 100755
+--- a/tools/appliance-creator
++++ b/tools/appliance-creator
+@@ -61,6 +61,10 @@ def parse_options(args):
+                       help="Disk format (default: raw)")
+     appopt.add_option("", "--no-compress", action="store_true", dest="no_compress", default=False,
+                       help="Avoid compressing the image")
++    appopt.add_option("", "--zstd", action="store_true", dest="zstd", default=False,
++                      help="Compress the image using zstd instead of xz")
++    appopt.add_option("", "--zstd-level", type="int", dest="zstd_level",
++                      help="Compress using specified compression level for zstd")
+     parser.add_option_group(appopt)
+     
+     
+@@ -134,7 +138,7 @@ def main():
+     if options.name:
+         name = options.name
+             
+-    creator = appcreate.ApplianceImageCreator(ks, name, options.disk_format, options.vmem, options.vcpu, releasever=options.version, no_compress=options.no_compress)
++    creator = appcreate.ApplianceImageCreator(ks, name, options.disk_format, options.vmem, options.vcpu, releasever=options.version, no_compress=options.no_compress, zstd=options.zstd, zstd_level=options.zstd_level)
+     creator.tmpdir = options.tmpdir
+     creator.checksum = options.checksum
+ 
