@@ -1,5 +1,5 @@
 diff --git a/appcreate/appliance.py b/appcreate/appliance.py
-index c6706cb..6276600 100644
+index c6706cb..dc49bcb 100644
 --- a/appcreate/appliance.py
 +++ b/appcreate/appliance.py
 @@ -47,7 +47,7 @@ class ApplianceImageCreator(ImageCreator):
@@ -20,7 +20,7 @@ index c6706cb..6276600 100644
  
          #appliance parameters
          self.vmem = vmem
-@@ -657,14 +659,29 @@ class ApplianceImageCreator(ImageCreator):
+@@ -657,14 +659,32 @@ class ApplianceImageCreator(ImageCreator):
                  dst = "%s/%s-%s.%s" % (self._outdir, self.name, name, self.__disk_format)
  
                  if self.__compress:
@@ -32,9 +32,11 @@ index c6706cb..6276600 100644
 -                        raise CreatorError("Unable to compress disk to %s" % self.__disk_format)
 -                    src = "%s.xz" % (src)
 -                    dst = "%s.xz" % (dst)
++                    logging.debug("compressing disk image")
 +                    if self.__zstd:
++                        logging.debug("using zstd for compression")
 +                        # Compress with zstd using 16MiB blocks size (for future seekability)
-+                        zstd_cmd = ["zstd", "-z", "--block-size=16777216", "-T0", src]
++                        zstd_cmd = ["zstd", "-z", "--block-size=16777216", "-T0"]
 +                        # Use custom compression level if specified
 +                        if self.__zstd_level:
 +                            zstd_cmd.append("-%s" % self.__zstd_level)
@@ -47,6 +49,7 @@ index c6706cb..6276600 100644
 +                        src = "%s.zst" % (src)
 +                        dst = "%s.zst" % (dst)
 +                    else:
++                        logging.debug("using xz for compression")
 +                        # Compress with xz using 16 MiB block size for seekability
 +                        rc = subprocess.call(["xz", "-z", "--block-size=16777216", "-T 0", src])
 +                        if rc == 0:
