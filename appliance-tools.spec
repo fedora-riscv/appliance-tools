@@ -12,7 +12,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 009.0
-Release: 7.1.riscv64%{?dist}
+Release: 7.2.riscv64%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
@@ -25,6 +25,10 @@ Patch0002: 0001-Leave-more-space-4MB-for-uboot-before-the-first-part.patch
 # NOT upstream
 # Add support for zstd compression instead of xz (optional)
 Patch0010: appliance-tools-add-zstd.patch
+
+# NOT upstream
+# Fix extlinux configuration file for RISC-V (riscv64)
+Patch0011: riscv-fix-extlinux-conf.patch
 
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python%{python_pkgversion}-imgcreate >= 1:25.0-2
@@ -70,6 +74,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Wed Oct 30 2019 David Abdurachmanov <david.abdurachmanov@sifive.com> - 009.0-7.2.riscv64
+- Fix extlinux configuration for RISC-V (riscv64)
+
 * Wed Oct 02 2019 David Abdurachmanov <david.abdurachmanov@sifive.com> - 009.0-7.0.riscv64
 - Add support for zstd compression for images (optional)
 
