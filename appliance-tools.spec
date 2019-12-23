@@ -12,7 +12,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 009.0
-Release: 7.2.riscv64%{?dist}
+Release: 9.0.riscv64%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
@@ -74,11 +74,15 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
-* Wed Oct 30 2019 David Abdurachmanov <david.abdurachmanov@sifive.com> - 009.0-7.2.riscv64
+* Mon Dec 23 2019 David Abdurachmanov <david.abdurachmanov@sifive.com> - 009.0-9.2.riscv64
 - Fix extlinux configuration for RISC-V (riscv64)
-
-* Wed Oct 02 2019 David Abdurachmanov <david.abdurachmanov@sifive.com> - 009.0-7.0.riscv64
 - Add support for zstd compression for images (optional)
+
+* Thu Oct 03 2019 Miro Hrončok <mhroncok@redhat.com> - 009.0-9
+- Rebuilt for Python 3.8.0rc1 (#1748018)
+
+* Mon Aug 19 2019 Miro Hrončok <mhroncok@redhat.com> - 009.0-8
+- Rebuilt for Python 3.8
 
 * Wed Jul 24 2019 Fedora Release Engineering <releng@fedoraproject.org> - 009.0-7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
