@@ -9,6 +9,15 @@
 %global python_pkgversion %{python3_pkgversion}
 %endif
 
+# Minimum version of imgcreate (livecd-tools)
+%global min_imgcreate_ver 25.0-2
+
+%if 0%{?fedora}
+%global min_imgcreate_evr 1:%{min_imgcreate_ver}
+%else
+%global min_imgcreate_evr %{min_imgcreate_ver}
+%endif
+
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 009.0
@@ -23,7 +32,7 @@ Patch0001: 0001-fstype-is-optional-for-swap-check-mountpoint-also.patch
 Patch0002: 0001-Leave-more-space-4MB-for-uboot-before-the-first-part.patch
 
 # Ensure system deps are installed (rhbz#1409536)
-Requires: python%{python_pkgversion}-imgcreate >= 1:25.0-2
+Requires: python%{python_pkgversion}-imgcreate %{?min_imgcrate_evr:>= %{min_imgcreate_evr}}
 Requires: python%{python_pkgversion}-progress
 Requires: python%{python_pkgversion}-future
 Requires: curl rsync kpartx
