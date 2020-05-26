@@ -21,7 +21,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 009.0
-Release: 10%{?dist}
+Release: 11%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
@@ -74,6 +74,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Tue May 26 2020 Miro Hrončok <mhroncok@redhat.com> - 009.0-11
+- Rebuilt for Python 3.9
+
 * Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 009.0-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
