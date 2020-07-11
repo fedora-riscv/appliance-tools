@@ -21,11 +21,14 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 010.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
 Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
+
+# Backports from upstream
+Patch0001: 0001-fix-subvolume-umount-path.patch
 
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python%{python_pkgversion}-imgcreate %{?min_imgcrate_evr:>= %{min_imgcreate_evr}}
@@ -73,6 +76,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Sat Jul 11 2020 Neal Gompa <ngompa13@gmail.com> - 010.0-2
+- Add patch to fix unmounting btrfs subvolumes
+
 * Fri Jul 10 2020 Neal Gompa <ngompa13@gmail.com> - 010.0-1
 - Update to 010.0 release
 - Drop merged patches
