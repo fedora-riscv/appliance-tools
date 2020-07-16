@@ -9,18 +9,26 @@
 %global python_pkgversion %{python3_pkgversion}
 %endif
 
+# Minimum version of imgcreate (livecd-tools)
+%global min_imgcreate_ver 25.0-2
+
+%if 0%{?fedora}
+%global min_imgcreate_evr 1:%{min_imgcreate_ver}
+%else
+%global min_imgcreate_evr %{min_imgcreate_ver}
+%endif
+
 Name: appliance-tools
 Summary: Tools for building Appliances
-Version: 009.0
-Release: 9.0.riscv64%{?dist}
+Version: 010.0
+Release: 2.0.riscv64%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
 Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
 
-# Patches backported from upstream
-Patch0001: 0001-fstype-is-optional-for-swap-check-mountpoint-also.patch
-Patch0002: 0001-Leave-more-space-4MB-for-uboot-before-the-first-part.patch
+# Backports from upstream
+Patch0001: 0001-fix-subvolume-umount-path.patch
 
 # NOT upstream
 # Add support for zstd compression instead of xz (optional)
@@ -31,7 +39,7 @@ Patch0010: appliance-tools-add-zstd.patch
 Patch0011: riscv-fix-extlinux-conf.patch
 
 # Ensure system deps are installed (rhbz#1409536)
-Requires: python%{python_pkgversion}-imgcreate >= 1:25.0-2
+Requires: python%{python_pkgversion}-imgcreate %{?min_imgcrate_evr:>= %{min_imgcreate_evr}}
 Requires: python%{python_pkgversion}-progress
 Requires: python%{python_pkgversion}-future
 Requires: curl rsync kpartx
@@ -39,6 +47,9 @@ Requires: zlib
 Requires: qemu-img
 Requires: xz
 Requires: zstd
+%if 0%{?fedora}
+Requires: btrfs-progs
+%endif
 Requires: xfsprogs
 Requires: sssd-client
 BuildRequires: python%{python_pkgversion}-devel
@@ -74,9 +85,22 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
-* Mon Dec 23 2019 David Abdurachmanov <david.abdurachmanov@sifive.com> - 009.0-9.2.riscv64
+* Thu Jul 16 2020 David Abdurachmanov <david.abdurachmanov@sifive.com> - 010.0-2.0.riscv64
 - Fix extlinux configuration for RISC-V (riscv64)
 - Add support for zstd compression for images (optional)
+
+* Sat Jul 11 2020 Neal Gompa <ngompa13@gmail.com> - 010.0-2
+- Add patch to fix unmounting btrfs subvolumes
+
+* Fri Jul 10 2020 Neal Gompa <ngompa13@gmail.com> - 010.0-1
+- Update to 010.0 release
+- Drop merged patches
+
+* Tue May 26 2020 Miro Hrončok <mhroncok@redhat.com> - 009.0-11
+- Rebuilt for Python 3.9
+
+* Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 009.0-10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
 * Thu Oct 03 2019 Miro Hrončok <mhroncok@redhat.com> - 009.0-9
 - Rebuilt for Python 3.8.0rc1 (#1748018)
