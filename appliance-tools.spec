@@ -21,7 +21,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 010.0
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
@@ -76,6 +76,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Mon Jul 27 2020 Fedora Release Engineering <releng@fedoraproject.org> - 010.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
 * Sat Jul 11 2020 Neal Gompa <ngompa13@gmail.com> - 010.0-2
 - Add patch to fix unmounting btrfs subvolumes
 
