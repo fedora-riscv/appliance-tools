@@ -20,15 +20,12 @@
 
 Name: appliance-tools
 Summary: Tools for building Appliances
-Version: 010.0
-Release: 3%{?dist}
+Version: 010.1
+Release: 1%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
 Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
-
-# Backports from upstream
-Patch0001: 0001-fix-subvolume-umount-path.patch
 
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python%{python_pkgversion}-imgcreate %{?min_imgcrate_evr:>= %{min_imgcreate_evr}}
@@ -76,6 +73,10 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Sun Aug 23 2020 Neal Gompa <ngompa13@gmail.com> - 010.1-1
+- Update to 010.1 release
+- Drop merged patches
+
 * Mon Jul 27 2020 Fedora Release Engineering <releng@fedoraproject.org> - 010.0-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
 
