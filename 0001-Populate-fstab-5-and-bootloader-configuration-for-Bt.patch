@@ -1,0 +1,140 @@
+From 27119bc104b3a7d5835a570987f9f1f1d7b011c3 Mon Sep 17 00:00:00 2001
+From: Neal Gompa <ngompa13@gmail.com>
+Date: Wed, 26 Aug 2020 16:43:58 -0400
+Subject: [PATCH] Populate fstab(5) and bootloader configuration for Btrfs
+ subvolumes
+
+In order for an image to be setup fully on boot, we need to populate
+fstab(5) configuration and ensure the bootloader has the right
+references for where the Btrfs filesystems are located on the disk.
+---
+ appcreate/appliance.py     | 42 +++++++++++++++++++++++++++++++++-----
+ appcreate/partitionedfs.py | 15 ++++++++++----
+ 2 files changed, 48 insertions(+), 9 deletions(-)
+
+diff --git a/appcreate/appliance.py b/appcreate/appliance.py
+index a1a0a67..863083a 100644
+--- a/appcreate/appliance.py
++++ b/appcreate/appliance.py
+@@ -76,23 +76,36 @@ class ApplianceImageCreator(ImageCreator):
+         self.grub2inst_params = []
+ 
+     def _get_fstab(self):
+-        s = ""
++        f = ""
++        has_btrfs_subvolumes = False
+         for mp in self.__instloop.mountOrder:
+             p = None
+             for p1 in self.__instloop.partitions:
++                if p1['fstype'] == "btrfs" and not p1['mountpoint'].startswith('/'):
++                    # This btrfs filesystem uses subvolumes
++                    has_btrfs_subvolumes = True
+                 if p1['mountpoint'] == mp:
+                     p = p1
+                     break
+-
++            if p['fstype'] == "btrfs" and not p['mountpoint'].startswith('/'):
++                # There's no mountpoint to export to fstab, so skip
++                continue
+             if not p['UUID'] is None:
+-                mountdev = p['UUID']
++                mountdev = "UUID=%s" % p['UUID']
+             else:
+                 mountdev = "LABEL=_%s" % p['mountpoint']
+-            s +=  "%(mountdev)s  %(mountpoint)s %(fstype)s    defaults,noatime 0 0\n" %  {
++            f +=  "%(mountdev)s  %(mountpoint)s %(fstype)s    defaults,noatime 0 0\n" %  {
+                 'mountdev': mountdev,
+                 'mountpoint': p['mountpoint'],
+                 'fstype': p['fstype'] }
+-        return s
++        if has_btrfs_subvolumes:
++            for s in self.__instloop.subvolumes:
++                f +=  "%(mountdev)s  %(mountpoint)s %(fstype)s    subvol=%(name)s,noatime 0 0\n" %  {
++                    'mountdev': "UUID=%s" % s['UUID'],
++                    'mountpoint': s['mountpoint'],
++                    'fstype': "btrfs",
++                    'name': s['name'] }
++        return f
+ 
+     def _create_mkinitrd_config(self):
+         #write  to tell which modules to be included in initrd
+@@ -298,6 +311,16 @@ class ApplianceImageCreator(ImageCreator):
+                 else:
+                     rootdev = "LABEL=_/"
+ 
++        for s in self.__instloop.subvolumes:
++            if s['mountpoint'] == "/boot":
++                bootdevnum = s['num'] - 1
++            elif s['mountpoint'] == "/" and bootdevnum is None:
++                bootdevnum = s['num'] - 1
++
++            if s['mountpoint'] == "/":
++                rootdevnum = s['num'] - 1
++                rootdev = s['UUID']
++
+         prefix = ""
+         if bootdevnum == rootdevnum:
+             prefix = "/boot"
+@@ -358,6 +381,15 @@ class ApplianceImageCreator(ImageCreator):
+                     rootdev = p['UUID']
+                 else:
+                     rootdev = "LABEL=_/"
++        for s in self.__instloop.subvolumes:
++            if s['mountpoint'] == "/boot":
++                bootdevnum = s['num'] - 1
++            elif s['mountpoint'] == "/" and bootdevnum is None:
++                bootdevnum = s['num'] - 1
++
++            if s['mountpoint'] == "/":
++                rootdevnum = s['num'] - 1
++                rootdev = s['UUID']
+         prefix = ""
+         if bootdevnum == rootdevnum:
+             prefix = "/boot"
+diff --git a/appcreate/partitionedfs.py b/appcreate/partitionedfs.py
+index 50206c4..9e81d2e 100644
+--- a/appcreate/partitionedfs.py
++++ b/appcreate/partitionedfs.py
+@@ -66,7 +66,12 @@ class PartitionedMount(Mount):
+                                 'num': None}) # Partition number
+ 
+     def add_subvolume(self, parent, mountpoint, name):
+-        self.subvolumes.append({'parent': parent, 'mountpoint': mountpoint, 'name': name})
++        self.subvolumes.append({'parent': parent, # parent location for subvolume
++                                'mountpoint': mountpoint, # Mount relative to chroot
++                                'name': name, # subvolume name
++                                'device': None, # kpartx device node for partition
++                                'UUID': None, # UUID for partition
++                                'num': None}) # Partition number
+ 
+     def __format_disks(self):
+         logging.debug("Formatting disks")
+@@ -299,11 +304,14 @@ class PartitionedMount(Mount):
+         others = []
+         ordered = []
+         for s in self.subvolumes:
++            s['device'] = subprocess.Popen(["findmnt", "-n", "-o", "SOURCE", "%s%s" % (self.mountdir, s['parent'])], stdout=subprocess.PIPE).communicate()[0].decode("utf-8").strip()
++            s['UUID'] = self.__getuuid(s['device'])
++            s['num'] = int(s['device'].rsplit('p', 1)[1])
+             if s['mountpoint'] == '/':
+                 ordered.append(s)
+             else:
+                 others.append(s)
+-  
++
+         ordered += others
+         for s in ordered:
+             base = "%s%s" % (self.mountdir, s['parent'])
+@@ -313,8 +321,7 @@ class PartitionedMount(Mount):
+             subprocess.call(['btrfs', 'subvol', 'create', path])
+             subprocess.call(['mkdir', '-p', mountpath])
+             logging.debug("Mounting Btrfs subvolume %s at path %s" % (s['name'], mountpath))
+-            device = subprocess.Popen(["findmnt", "-n", "-o", "SOURCE", base], stdout=subprocess.PIPE).communicate()[0].decode("utf-8").strip()
+-            subprocess.call(['mount', '-t', 'btrfs', '-o', 'subvol=%s' % s['name'], device, mountpath])
++            subprocess.call(['mount', '-t', 'btrfs', '-o', 'subvol=%s' % s['name'], s['device'], mountpath])
+ 
+     def mount(self):
+         for dev in list(self.disks.keys()):
+-- 
+2.26.2
+

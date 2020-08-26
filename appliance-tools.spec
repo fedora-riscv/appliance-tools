@@ -21,11 +21,14 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 010.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
 Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
+
+# Patch proposed to fix rhbz#1855034
+Patch0001: 0001-Populate-fstab-5-and-bootloader-configuration-for-Bt.patch
 
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python%{python_pkgversion}-imgcreate %{?min_imgcrate_evr:>= %{min_imgcreate_evr}}
@@ -73,6 +76,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Wed Aug 26 2020 Neal Gompa <ngompa13@gmail.com> - 010.2-2
+- Add proposed patch to fix configuring fstab and grub for btrfs (#1855034)
+
 * Mon Aug 24 2020 Neal Gompa <ngompa13@gmail.com> - 010.2-1
 - Update to 010.2 release
 
