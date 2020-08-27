@@ -20,16 +20,12 @@
 
 Name: appliance-tools
 Summary: Tools for building Appliances
-Version: 010.2
-Release: 3%{?dist}
+Version: 011.0
+Release: 1%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
 Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
-
-# Patches proposed to fix rhbz#1855034
-Patch0001: 0001-Populate-fstab-5-and-bootloader-configuration-for-Bt.patch
-Patch0002: 0002-appcreate-partitionedfs-Ensure-__getuuid-actually-ge.patch
 
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python%{python_pkgversion}-imgcreate %{?min_imgcrate_evr:>= %{min_imgcreate_evr}}
@@ -77,7 +73,11 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
-* Wed Aug 26 2020 Neal Gompa <ngompa13@gmail.com> - 010-2-3
+* Wed Aug 26 2020 Neal Gompa <ngompa13@gmail.com> - 011.0-1
+- Update to 011.0 release
+- Drop merged patches
+
+* Wed Aug 26 2020 Neal Gompa <ngompa13@gmail.com> - 010.2-3
 - Refresh patches for fixing bootloader config for btrfs
 
 * Wed Aug 26 2020 Neal Gompa <ngompa13@gmail.com> - 010.2-2
