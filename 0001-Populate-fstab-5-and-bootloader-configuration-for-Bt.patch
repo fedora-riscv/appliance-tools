@@ -1,19 +1,19 @@
-From 27119bc104b3a7d5835a570987f9f1f1d7b011c3 Mon Sep 17 00:00:00 2001
+From 4d7c81f7b4ff4ca7b2a84632f2f0b89d5af58bbf Mon Sep 17 00:00:00 2001
 From: Neal Gompa <ngompa13@gmail.com>
-Date: Wed, 26 Aug 2020 16:43:58 -0400
-Subject: [PATCH] Populate fstab(5) and bootloader configuration for Btrfs
+Date: Wed, 26 Aug 2020 20:53:20 -0400
+Subject: [PATCH 1/2] Populate fstab(5) and bootloader configuration for Btrfs
  subvolumes
 
 In order for an image to be setup fully on boot, we need to populate
 fstab(5) configuration and ensure the bootloader has the right
 references for where the Btrfs filesystems are located on the disk.
 ---
- appcreate/appliance.py     | 42 +++++++++++++++++++++++++++++++++-----
- appcreate/partitionedfs.py | 15 ++++++++++----
- 2 files changed, 48 insertions(+), 9 deletions(-)
+ appcreate/appliance.py     | 46 ++++++++++++++++++++++++++++++++------
+ appcreate/partitionedfs.py | 15 +++++++++----
+ 2 files changed, 50 insertions(+), 11 deletions(-)
 
 diff --git a/appcreate/appliance.py b/appcreate/appliance.py
-index a1a0a67..863083a 100644
+index a1a0a67..03d119a 100644
 --- a/appcreate/appliance.py
 +++ b/appcreate/appliance.py
 @@ -76,23 +76,36 @@ class ApplianceImageCreator(ImageCreator):
@@ -58,14 +58,21 @@ index a1a0a67..863083a 100644
  
      def _create_mkinitrd_config(self):
          #write  to tell which modules to be included in initrd
-@@ -298,6 +311,16 @@ class ApplianceImageCreator(ImageCreator):
+@@ -282,6 +295,7 @@ class ApplianceImageCreator(ImageCreator):
+         cfg.close()
+ 
+     def _get_grub_boot_config(self):
++        btrfsboot = False
+         bootdevnum = None
+         rootdevnum = None
+         rootdev = None
+@@ -298,8 +312,17 @@ class ApplianceImageCreator(ImageCreator):
                  else:
                      rootdev = "LABEL=_/"
  
 +        for s in self.__instloop.subvolumes:
 +            if s['mountpoint'] == "/boot":
-+                bootdevnum = s['num'] - 1
-+            elif s['mountpoint'] == "/" and bootdevnum is None:
++                btrfsboot = True
 +                bootdevnum = s['num'] - 1
 +
 +            if s['mountpoint'] == "/":
@@ -73,24 +80,37 @@ index a1a0a67..863083a 100644
 +                rootdev = s['UUID']
 +
          prefix = ""
-         if bootdevnum == rootdevnum:
+-        if bootdevnum == rootdevnum:
++        if bootdevnum == rootdevnum and not btrfsboot:
              prefix = "/boot"
-@@ -358,6 +381,15 @@ class ApplianceImageCreator(ImageCreator):
+ 
+         return (bootdevnum, rootdevnum, rootdev, prefix)
+@@ -343,6 +366,7 @@ class ApplianceImageCreator(ImageCreator):
+         cfg.close()
+ 
+     def _get_extlinux_boot_config(self):
++        btrfsboot = False
+         bootdevnum = None
+         rootdevnum = None
+         rootdev = None
+@@ -358,8 +382,16 @@ class ApplianceImageCreator(ImageCreator):
                      rootdev = p['UUID']
                  else:
                      rootdev = "LABEL=_/"
 +        for s in self.__instloop.subvolumes:
 +            if s['mountpoint'] == "/boot":
-+                bootdevnum = s['num'] - 1
-+            elif s['mountpoint'] == "/" and bootdevnum is None:
++                btrfsboot = True
 +                bootdevnum = s['num'] - 1
 +
 +            if s['mountpoint'] == "/":
 +                rootdevnum = s['num'] - 1
 +                rootdev = s['UUID']
          prefix = ""
-         if bootdevnum == rootdevnum:
+-        if bootdevnum == rootdevnum:
++        if bootdevnum == rootdevnum and not btrfsboot:
              prefix = "/boot"
+ 
+         return (bootdevnum, rootdevnum, rootdev, prefix)
 diff --git a/appcreate/partitionedfs.py b/appcreate/partitionedfs.py
 index 50206c4..9e81d2e 100644
 --- a/appcreate/partitionedfs.py
