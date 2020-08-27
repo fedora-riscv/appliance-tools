@@ -20,7 +20,7 @@
 
 Name: appliance-tools
 Summary: Tools for building Appliances
-Version: 011.0
+Version: 011.1
 Release: 1%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
@@ -73,6 +73,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Thu Aug 27 2020 Neal Gompa <ngompa13@gmail.com> - 011.1-1
+- Update to 011.1 release
+
 * Wed Aug 26 2020 Neal Gompa <ngompa13@gmail.com> - 011.0-1
 - Update to 011.0 release
 - Drop merged patches
