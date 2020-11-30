@@ -1,0 +1,15 @@
+diff --git a/appcreate/appliance.py b/appcreate/appliance.py
+index dc49bcb..f65d12a 100644
+--- a/appcreate/appliance.py
++++ b/appcreate/appliance.py
+@@ -362,9 +362,7 @@ class ApplianceImageCreator(ImageCreator):
+         for v in versions:
+             extlinux += "label %s (%s)\n" % (self.name, v)
+             extlinux += "\tkernel %s/vmlinuz-%s\n" % (prefix, v)
+-            extlinux += "\tappend ro root=%s %s\n" % (rootdev, options)
+-            if 'extlinux-bootloader' in packages:
+-                extlinux += "\tfdtdir %s/dtb-%s/\n" % (prefix, v)
++            extlinux += "\taddappend ro root=%s %s\n" % (rootdev, options)
+             extlinux += "\tinitrd %s/%s-%s.img\n\n" % (prefix, initrd, v)
+ 
+ 

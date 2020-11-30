@@ -21,11 +21,19 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 011.1
-Release: 1%{?dist}
+Release: 1.0.riscv64%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
 Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
+
+# NOT upstream
+# Add support for zstd compression instead of xz (optional)
+Patch0010: appliance-tools-add-zstd.patch
+
+# NOT upstream
+# Fix extlinux configuration file for RISC-V (riscv64)
+Patch0011: riscv-fix-extlinux-conf.patch
 
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python%{python_pkgversion}-imgcreate %{?min_imgcrate_evr:>= %{min_imgcreate_evr}}
@@ -35,6 +43,7 @@ Requires: curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
 Requires: xz
+Requires: zstd
 %if 0%{?fedora}
 Requires: btrfs-progs
 %endif
@@ -73,6 +82,10 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Mon Nov 30 2020 David Abdurachmanov <david.abdurachmanov@sifive.com> - 011.1-1.0.riscv64
+- Fix extlinux configuration for RISC-V (riscv64)
+- Add support for zstd compression for images (optional)
+
 * Thu Aug 27 2020 Neal Gompa <ngompa13@gmail.com> - 011.1-1
 - Update to 011.1 release
 
