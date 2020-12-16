@@ -43,6 +43,7 @@ Requires: sssd-client
 BuildRequires: python%{python_pkgversion}-devel
 BuildRequires: /usr/bin/pod2man
 BuildRequires: /usr/bin/which
+BuildRequires: make
 BuildArch: noarch
 
 
