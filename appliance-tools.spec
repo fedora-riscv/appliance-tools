@@ -21,7 +21,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 011.1
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
@@ -77,6 +77,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Wed Jul 21 2021 Fedora Release Engineering <releng@fedoraproject.org> - 011.1-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
 * Sat Jun 26 2021 Neal Gompa <ngompa13@gmail.com> - 011.1-4
 - Backport fix to deal with grub-install errors for UEFI
 
