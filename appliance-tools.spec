@@ -10,7 +10,7 @@
 %endif
 
 # Minimum version of imgcreate (livecd-tools)
-%global min_imgcreate_ver 25.0-2
+%global min_imgcreate_ver 28.3-3
 
 %if 0%{?fedora}
 %global min_imgcreate_evr 1:%{min_imgcreate_ver}
