@@ -21,7 +21,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 011.1
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
@@ -29,6 +29,7 @@ Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
 
 # Backports from upstream
 Patch0001: 0001-Ignore-grub2-install-errors-if-they-are-expected.patch
+Patch0002: 0002-switch-from-authconfig-to-authselect.patch
 
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python%{python_pkgversion}-imgcreate %{?min_imgcrate_evr:>= %{min_imgcreate_evr}}
@@ -77,6 +78,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Mon Aug 23 2021 Pavel Březina <pbrezina@redhat.com> - 011.1-6
+- Switch from authconfig to authselect (rhbz#1982158)
+
 * Wed Jul 21 2021 Fedora Release Engineering <releng@fedoraproject.org> - 011.1-5
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
