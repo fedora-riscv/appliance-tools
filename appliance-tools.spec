@@ -21,7 +21,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 011.1
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
@@ -78,6 +78,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Wed Jan 19 2022 Fedora Release Engineering <releng@fedoraproject.org> - 011.1-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
 * Mon Aug 23 2021 Pavel Březina <pbrezina@redhat.com> - 011.1-6
 - Switch from authconfig to authselect (rhbz#1982158)
 
