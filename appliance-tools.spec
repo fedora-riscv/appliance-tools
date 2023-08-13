@@ -21,7 +21,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 011.2
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
@@ -31,6 +31,7 @@ Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
 Requires: python%{python_pkgversion}-imgcreate %{?min_imgcrate_evr:>= %{min_imgcreate_evr}}
 Requires: python%{python_pkgversion}-progress
 Requires: python%{python_pkgversion}-future
+Requires: python%{python_pkgversion}-setuptools
 Requires: curl rsync kpartx
 Requires: zlib
 Requires: qemu-img
@@ -75,6 +76,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Sun Aug 13 2023 Neal Gompa <ngompa@fedoraproject.org> - 011.2-5
+- Add runtime dep for setuptools (#2135410)
+
 * Sun Aug 13 2023 Neal Gompa <ngompa@fedoraproject.org> - 011.2-4
 - Add BR for setuptools (#2135410)
 
