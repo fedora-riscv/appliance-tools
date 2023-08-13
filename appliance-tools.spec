@@ -21,7 +21,7 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 011.2
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
@@ -41,6 +41,7 @@ Requires: btrfs-progs
 Requires: xfsprogs
 Requires: sssd-client
 BuildRequires: python%{python_pkgversion}-devel
+BuildRequires: python%{python_pkgversion}-setuptools
 BuildRequires: /usr/bin/pod2man
 BuildRequires: /usr/bin/which
 BuildRequires: make
@@ -74,6 +75,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Sun Aug 13 2023 Neal Gompa <ngompa@fedoraproject.org> - 011.2-4
+- Add BR for setuptools (#2135410)
+
 * Wed Jul 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 011.2-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
 
