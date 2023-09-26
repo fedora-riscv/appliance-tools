@@ -1,0 +1,14 @@
+diff --git a/appcreate/appliance.py b/appcreate/appliance.py
+index e9ff5bf..1a7bcde 100644
+--- a/appcreate/appliance.py
++++ b/appcreate/appliance.py
+@@ -206,6 +206,9 @@ class ApplianceImageCreator(ImageCreator):
+                 elif 'grub2-efi-aa64' in packages:
+                     self.bootloader = 'grub2'
+                     self.grub2inst_may_fail = True
++                elif 'grub2-efi-riscv64' in packages:
++                    self.bootloader = 'grub2'
++                    self.grub2inst_may_fail = True
+                 elif 'grub2-efi-ia32' in packages:
+                     self.bootloader = 'grub2'
+                     self.grub2inst_may_fail = True

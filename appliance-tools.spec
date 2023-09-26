@@ -21,11 +21,13 @@
 Name: appliance-tools
 Summary: Tools for building Appliances
 Version: 011.2
-Release: 5%{?dist}
+Release: 5.0.riscv64%{?dist}
 License: GPLv2
 URL: https://pagure.io/appliance-tools
 
 Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
+
+Patch0: detect-grub2-riscv64.patch
 
 # Ensure system deps are installed (rhbz#1409536)
 Requires: python%{python_pkgversion}-imgcreate %{?min_imgcrate_evr:>= %{min_imgcreate_evr}}
@@ -76,6 +78,9 @@ rm -rf %{buildroot}%{_datadir}/doc/%{name}
 %{python_sitelib}/ec2convert/
 
 %changelog
+* Tue Sep 26 2023 David Abdurachmanov <davidlt@rivosinc.com> - 011.2-5.0.riscv64
+- Detect grub2 on riscv64
+
 * Sun Aug 13 2023 Neal Gompa <ngompa@fedoraproject.org> - 011.2-5
 - Add runtime dep for setuptools (#2135410)
 
